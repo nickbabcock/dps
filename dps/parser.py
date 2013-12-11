@@ -3,6 +3,15 @@ from datetime import datetime, date, timedelta
 import sqlite3
 import requests
 
+class memoize(dict):
+    def __init__(self, func):
+        self.func = func
+    def __call__(self, *args):
+        return self[args]
+    def __missing__(self, key):
+        result = self[key] = self.func(*key)
+        return result
+
 def parse_page(html):
     """
     Given a string that contains the html markup for a dps page, parse out
@@ -31,6 +40,7 @@ def parse_page(html):
     locations = [tr.get_text().strip() for tr in table.find_all('tr')[1::5]]
     return zip(dates, crimes, locations, descriptions)
 
+@memoize
 def get_coordinates_from_address(address):
     """ 
     Use Google's geocoding API to translate addresses to coordinates. Returns
@@ -62,29 +72,27 @@ def get_data(day):
 
 def store_data(connection, data):
     """ Given a connection and data, insert the data into the connection """
-    sql = ("INSERT INTO Crimes(Time, Crime, Latitude, Longitude, Description) " 
+    sql = ("INSERT INTO Crimes(Time, Crime, Latitude, Longitude, Description) "
           "VALUES (?,?,?,?,?)")
 
     with connection:
-        connection.executemany(sql, data) 
+        connection.executemany(sql, data)
 
-def scrape(frm, until=date(2000, 1, 23)):
+def scrape(frm=date.today(), until=date(2000, 1, 23)):
     """
     Scrape all the data on crimes from DPS's website from a specified date
     until another working backwards. If no until date is specified then it will
     default to the first date that DPS has data available (January 23rd, 2000).
     Stores the gathered data into a database. We only have 2,500 requests per
     24 hour period due to the Google dependency on translating addresses, so we
-    rate limit ourselves to only 2,000 crimes in one instance. 
+    rate limit ourselves to only 2,000 locations in one instance.
     """
 
     with open('.database', 'r') as f:
         connection = sqlite3.connect(f.read().strip()) 
 
-    scraped = 0
-    while frm >= until and scraped < 2000:
+    while frm >= until and len(get_coordinates_from_address) < 2000:
         data = get_data(frm)
-        scraped += len(data)
         store_data(connection, data)
-        print "Processed {0:%m/%d/%Y}".format(frm)
+        print "Processed {0:%m/%d/%Y} {1}".format(frm, len(get_coordinates_from_address))
         frm -= timedelta(1)
