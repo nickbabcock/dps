@@ -42,10 +42,10 @@ def parse_page(html):
 
 @memoize
 def get_coordinates_from_address(address):
-    """ 
+    """
     Use Google's geocoding API to translate addresses to coordinates. Returns
     a tuple of latitude and longitude of address.
-    """ 
+    """
     url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false'
 
     # DPS never labels that we live in Ann Arbor MI :(
@@ -57,14 +57,14 @@ def get_coordinates_from_address(address):
     lat = float(results[0]['geometry']['location']['lat'])
     lng = float(results[0]['geometry']['location']['lng'])
     return (lat, lng)
-    
+
 def get_data(day):
     """
     Given a date, retrieve the corresponding dps incident log for that day and
     parse it for information. Returns a list of tuples (date, crime, latitude,
     longitude, description).
     """
-    url = 'http://police.umich.edu/?s=crime_log' 
+    url = 'http://police.umich.edu/?s=crime_log'
     r = requests.get(url, params={'d': day.strftime('%Y/%m/%d')})
     data = parse_page(r.text)
     return [(date,  crime) + get_coordinates_from_address(address) + (description,)
@@ -89,7 +89,7 @@ def scrape(frm=date.today(), until=date(2000, 1, 23)):
     """
 
     with open('.database', 'r') as f:
-        connection = sqlite3.connect(f.read().strip()) 
+        connection = sqlite3.connect(f.read().strip())
 
     while frm >= until and len(get_coordinates_from_address) < 2000:
         data = get_data(frm)
