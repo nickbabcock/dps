@@ -62,7 +62,7 @@ def get_data(day):
 
 def store_data(connection, data):
     """ Given a connection and data, insert the data into the connection """
-    sql = ("INSERT INTO Crimes(Crime, Time, Latitude, Longitude, Description) " 
+    sql = ("INSERT INTO Crimes(Time, Crime, Latitude, Longitude, Description) " 
           "VALUES (?,?,?,?,?)")
 
     with connection:
