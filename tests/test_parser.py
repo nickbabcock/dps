@@ -1,6 +1,7 @@
 import unittest
 import os
 import sys
+import requests
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from dps import parser
@@ -12,10 +13,11 @@ def get_testdata(*paths):
     path = os.path.join(test_data, *paths)
     return open(path, 'rb').read()
 
-class TestParsingFunctions(unittest.TestCase):
-    def test_a(self):
-        self.assertTrue(get_testdata('no-events.htm'))
+def get_api_key():
+    with open('../.api-key', 'r') as f:
+        return f.read().strip()
 
+class TestParsingFunctions(unittest.TestCase):
     def test_no_event_length(self):
         data = parser.parse_page(get_testdata('no-events.htm'))
         self.assertEqual(0, len(data))

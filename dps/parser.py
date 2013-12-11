@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date, timedelta
+import sqlite3
+import requests
 
 def parse_page(html):
     """
@@ -28,4 +30,61 @@ def parse_page(html):
     descriptions = [tr.get_text().strip() for tr in table.find_all('tr')[2::5]]
     locations = [tr.get_text().strip() for tr in table.find_all('tr')[1::5]]
     return zip(dates, crimes, locations, descriptions)
+
+def get_coordinates_from_address(address):
+    """ 
+    Use Google's geocoding API to translate addresses to coordinates. Returns
+    a tuple of latitude and longitude of address.
+    """ 
+    url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false'
+
+    # DPS never labels that we live in Ann Arbor MI :(
+    address += ', Ann Arbor, MI'
+    r = requests.get(url, params={'address': address})
+    results = r.json()['results']
+    if len(results) == 0:
+        raise Exception(address + ' is unknown!')
+    lat = float(results[0]['geometry']['location']['lat'])
+    lng = float(results[0]['geometry']['location']['lng'])
+    return (lat, lng)
     
+def get_data(day):
+    """
+    Given a date, retrieve the corresponding dps incident log for that day and
+    parse it for information. Returns a list of tuples (date, crime, latitude,
+    longitude, description).
+    """
+    url = 'http://police.umich.edu/?s=crime_log' 
+    r = requests.get(url, params={'d': day.strftime('%Y/%m/%d')})
+    data = parse_page(r.text)
+    return [(date,  crime) + get_coordinates_from_address(address) + (description,)
+            for date, crime, address, description in data]
+
+def store_data(connection, data):
+    """ Given a connection and data, insert the data into the connection """
+    sql = ("INSERT INTO Crimes(Crime, Time, Latitude, Longitude, Description) " 
+          "VALUES (?,?,?,?,?)")
+
+    with connection:
+        connection.executemany(sql, data) 
+
+def scrape(frm, until=date(2000, 1, 23)):
+    """
+    Scrape all the data on crimes from DPS's website from a specified date
+    until another working backwards. If no until date is specified then it will
+    default to the first date that DPS has data available (January 23rd, 2000).
+    Stores the gathered data into a database. We only have 2,500 requests per
+    24 hour period due to the Google dependency on translating addresses, so we
+    rate limit ourselves to only 2,000 crimes in one instance. 
+    """
+
+    with open('.database', 'r') as f:
+        connection = sqlite3.connect(f.read().strip()) 
+
+    scraped = 0
+    while frm >= until and scraped < 2000:
+        data = get_data(frm)
+        scraped += len(data)
+        store_data(connection, data)
+        print "Processed {0:%m/%d/%Y}".format(frm)
+        frm -= timedelta(1)
