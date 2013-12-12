@@ -87,12 +87,16 @@ def scrape(frm=date.today(), until=date(2000, 1, 23)):
     24 hour period due to the Google dependency on translating addresses, so we
     rate limit ourselves to only 2,000 locations in one instance.
     """
-
-    with open('.database', 'r') as f:
-        connection = sqlite3.connect(f.read().strip())
-
+    
+    connection = connect_db();
     while frm >= until and len(get_coordinates_from_address) < 2000:
         data = get_data(frm)
         store_data(connection, data)
         print "Processed {0:%m/%d/%Y} {1}".format(frm, len(get_coordinates_from_address))
         frm -= timedelta(1)
+
+def connect_db():
+    """ Establishes connection with database with scraped data """
+    with open('.database', 'r') as f:
+        return sqlite3.connect(f.read().strip())
+    
