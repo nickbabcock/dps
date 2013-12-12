@@ -26,3 +26,21 @@ def for_hour_incidents(con):
         hour, number = row[:]
         data[int(hour)] = int(number)
     return data
+
+def for_day_incidents(con):
+    """
+    Given a connection to the database, will return a list of the number of
+    incidents that have occurred on that day. The list is 366 in length (leap
+    years). The first element corresponding to January 1st. Due to the nature
+    of leap years shifting dates, the algorithm plays dumb and acts as if there
+    is a December 32nd
+    """
+    query = """ SELECT strftime('%j', Time), COUNT(*) from Crimes
+                GROUP BY strftime('%j', Time)  """
+    data = [0] * 366
+    for row in con.execute(query):
+        day, number = row[:]
+
+        # SQLite format is 001 - 366
+        data[int(day) - 1] = int(number)
+    return data

@@ -12,6 +12,10 @@ class MockHour:
     def execute(self, _):
         return [('01', '1570'), ('04', '554')]
 
+class MockDay:
+    def execute(self, _):
+        return [('001', '100'), ('366', '300')]
+
 class TestQueryFunctions(unittest.TestCase):
     def test_weekdays(self):
         actual = query.for_weekday_incidents(MockWeek())
@@ -23,4 +27,9 @@ class TestQueryFunctions(unittest.TestCase):
         expected = [0] * 24
         expected[1] = 1570
         expected[4] = 554
+        self.assertSequenceEqual(expected, actual)
+
+    def test_days(self):
+        actual = query.for_day_incidents(MockDay())
+        expected = [100]  + [0] * 364 + [300]
         self.assertSequenceEqual(expected, actual)
