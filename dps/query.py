@@ -1,4 +1,4 @@
-def for_weekday_incidents(con):
+def for_weekday_statistics(con):
     """
     Given a connection to the database, will return a dictionary of weekday
     names and the number of incidents that have occurred on that day.
@@ -13,7 +13,7 @@ def for_weekday_incidents(con):
     # have different meanings of the first day of the week.
     return { days[int(day)]: int(num) for day, num in rows }
 
-def for_hour_incidents(con):
+def for_hour_statistics(con):
     """
     Given a connection to the database, will return a list of the number of
     incidents that occurred at a given time. The list is 24 in length with the
@@ -27,7 +27,7 @@ def for_hour_incidents(con):
         data[int(hour)] = int(number)
     return data
 
-def for_day_incidents(con):
+def for_day_statistics(con):
     """
     Given a connection to the database, will return a list of the number of
     incidents that have occurred on that day. The list is 366 in length (leap
@@ -45,7 +45,7 @@ def for_day_incidents(con):
         data[int(day) - 1] = int(number)
     return data
 
-def for_week_incidents(con):
+def for_week_statistics(con):
     """
     Given a connection to the database, will return a list of the number of
     incidents that have occurred on that week. The list is 54 in length. Yes,

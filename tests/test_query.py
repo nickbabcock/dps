@@ -22,23 +22,23 @@ class MockWeek:
 
 class TestQueryFunctions(unittest.TestCase):
     def test_weekdays(self):
-        actual = query.for_weekday_incidents(MockWeekDay())
+        actual = query.for_weekday_statistics(MockWeekDay())
         expected = {'Sunday': 1000, 'Tuesday': 2000, 'Friday': 5000}
         self.assertDictEqual(expected, actual)
 
     def test_hour(self):
-        actual = query.for_hour_incidents(MockHour())
+        actual = query.for_hour_statistics(MockHour())
         expected = [0] * 24
         expected[1] = 1570
         expected[4] = 554
         self.assertSequenceEqual(expected, actual)
 
     def test_days(self):
-        actual = query.for_day_incidents(MockDay())
+        actual = query.for_day_statistics(MockDay())
         expected = [100]  + [0] * 364 + [300]
         self.assertSequenceEqual(expected, actual)
 
     def test_weeks(self):
-        actual = query.for_week_incidents(MockWeek())
+        actual = query.for_week_statistics(MockWeek())
         expected = [100] + [0] * 52 + [200]
         self.assertSequenceEqual(expected, actual)
