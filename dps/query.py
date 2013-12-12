@@ -44,3 +44,17 @@ def for_day_incidents(con):
         # SQLite format is 001 - 366
         data[int(day) - 1] = int(number)
     return data
+
+def for_week_incidents(con):
+    """
+    Given a connection to the database, will return a list of the number of
+    incidents that have occurred on that week. The list is 54 in length. Yes,
+    54.
+    """
+    query = """ SELECT strftime('%W', Time), COUNT(*) FROM Crimes
+                GROUP BY strftime('%W', Time) """
+    data = [0] * 54
+    for row in con.execute(query):
+        week, number = row[:]
+        data[int(week)] = int(number)
+    return data
