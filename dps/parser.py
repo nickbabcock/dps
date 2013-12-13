@@ -28,14 +28,16 @@ def parse_page(html):
 
     # Crime info is grouped is rows of 5
     # dates are in the first row, first column
-    # crimes are in the first row, second column
+    # crimes are in the first row, second column unless there is no third row,
+    #   which means that the type doesn't exist.
     # location is in the second row
     # description is in the third row
     first_row = table.find_all('tr')[::5]
     dates = [row.find_all('td')[0] for row in first_row]
     dates = [datetime.strptime(d.get_text(), '%b %d %Y %I:%M %p') for d in dates]
-    crimes = [row.find_all('td')[1] for row in first_row]
-    crimes = [crime.get_text().strip() for crime in crimes]
+    crimes = [row.find_all('td') for row in first_row]
+    crimes = [row[1] if len(row) == 3 else 'Not listed' for row in crimes]
+    crimes = [c.get_text().strip() if type(c) is not str else c for c in crimes]
     descriptions = [tr.get_text().strip() for tr in table.find_all('tr')[2::5]]
     locations = [tr.get_text().strip() for tr in table.find_all('tr')[1::5]]
     return zip(dates, crimes, locations, descriptions)

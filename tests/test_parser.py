@@ -40,5 +40,10 @@ class TestParsingFunctions(unittest.TestCase):
         expected = u'1085 SOUTH UNIVERSITY, Ann Arbor, MI'
         self.assertEqual(expected, actual)
 
+    def test_not_listed(self):
+        data = parser.parse_page(get_testdata('not-listed.htm'))
+        last_crime = data[-1][1]
+        self.assertEqual('Not listed', last_crime)
+
 if __name__ == '__main__':
     unittest.main()
