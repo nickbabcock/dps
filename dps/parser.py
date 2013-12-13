@@ -55,7 +55,9 @@ def normalize_address(address):
     address = address[address.find(u'\xa0')+1:].strip()
 
     # DPS never labels that we live in Ann Arbor MI :(
-    address += ', Ann Arbor, MI'
+    # Fallback to Ann Arbor, MI if no address listed (not every incident
+    # has or needs an address)
+    address += ', Ann Arbor, MI' if address else 'Ann Arbor, MI'
     return address
 
 @memoize

@@ -45,5 +45,11 @@ class TestParsingFunctions(unittest.TestCase):
         last_crime = data[-1][1]
         self.assertEqual('Not listed', last_crime)
 
+    def test_empty_address(self):
+        test = u''
+        actual = parser.normalize_address(test)
+        expected = 'Ann Arbor, MI'
+        self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
