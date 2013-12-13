@@ -31,6 +31,10 @@ def api_statistics():
 def day_incidents(year, month, day):
     return jsonify(result=query.for_day_incidents(get_db(), date(year, month, day)))
 
+@app.route('/api/v1/incident/<int:rowid>')
+def incident(rowid):
+    return jsonify(result=query.for_incident(get_db(), rowid))
+
 @app.route('/api/v1/date/<int:year>/<int:month>/<int:day>/thru/<int:year2>/<int:month2>/<int:day2>')
 def day_incidents_thru(year, month, day, year2, month2, day2):
     start = date(year, month, day)

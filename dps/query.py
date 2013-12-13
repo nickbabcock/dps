@@ -95,3 +95,13 @@ def for_day_incidents_thru(con, start, end=None):
     end = end.strftime('%Y-%m-%d 23:59:59')
     return parse_rows(con.execute(query, (start, end)))
 
+def for_incident(con, rowid):
+    """
+    Given a connection to the database and a rowid, retrieve the one row
+    corresponding to that rowid
+    """
+    query = """ SELECT rowid, Time, Crime, Latitude, Longitude, Description
+                FROM Crimes
+                WHERE rowid = ? """
+    results = parse_rows(con.execute(query, (rowid,)))
+    return results[0] if len(results) else None
