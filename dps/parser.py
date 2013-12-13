@@ -40,6 +40,22 @@ def parse_page(html):
     locations = [tr.get_text().strip() for tr in table.find_all('tr')[1::5]]
     return zip(dates, crimes, locations, descriptions)
 
+def normalize_address(address):
+    """
+    Given a location parsed from a DPS page, normalize it such that it can
+    be sent to other services to gather more information. Returns the street
+    from the address with the city of Ann Arbor, MI appended to it
+    """
+    # Beautiful soup leaves the &nbsp; in the resulting location when the
+    # location is a building + a street address, but I don't really blame it.
+    # DPS should not use &nbsp; for a delimiter of any kind. This is fixed by
+    # taking just the street address in all cases
+    address = address[address.find(u'\xa0')+1:].strip()
+
+    # DPS never labels that we live in Ann Arbor MI :(
+    address += ', Ann Arbor, MI'
+    return address
+
 @memoize
 def get_coordinates_from_address(address):
     """
@@ -47,10 +63,7 @@ def get_coordinates_from_address(address):
     a tuple of latitude and longitude of address.
     """
     url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false'
-
-    # DPS never labels that we live in Ann Arbor MI :(
-    address += ', Ann Arbor, MI'
-    r = requests.get(url, params={'address': address})
+    r = requests.get(url, params={'address': normalize_address(address)})
     results = r.json()['results']
     if len(results) == 0:
         raise Exception(address + ' is unknown!')

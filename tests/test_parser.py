@@ -26,5 +26,19 @@ class TestParsingFunctions(unittest.TestCase):
         data = parser.parse_page(get_testdata('events.htm'))
         self.assertEqual(14, len(data))
 
+    def test_address_normalization(self):
+        test = u'1300 BLOCK CATHERINE STREET'
+        actual = parser.normalize_address(test)
+        expected = u'1300 BLOCK CATHERINE STREET, Ann Arbor, MI'
+        self.assertEqual(expected, actual)
+
+    def test_address_normalization_nbsp(self):
+        # Since beautiful soup keeps &nbsp; in the output, it screws up google
+        # so it should be removed
+        test = u'WEST HALL ARCH \xa0 1085 SOUTH UNIVERSITY'
+        actual = parser.normalize_address(test)
+        expected = u'1085 SOUTH UNIVERSITY, Ann Arbor, MI'
+        self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
