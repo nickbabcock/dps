@@ -1,6 +1,10 @@
 from datetime import datetime, timedelta
 
 def parse_rows(rows):
+    """
+    Given an iterator to database rows, will translate the values into a list
+    of dictionaries that will make it easier for others to interpret.
+    """
     return [{
             'id': row[0],
             'time': row[1],
