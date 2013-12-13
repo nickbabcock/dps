@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 
 def parse_rows(rows):
     return [{
-            'time': row[0],
-            'crime': row[1],
-            'latitude': row[2],
-            'longitude': row[3],
-            'description': row[4]
+            'id': row[0],
+            'time': row[1],
+            'crime': row[2],
+            'latitude': row[3],
+            'longitude': row[4],
+            'description': row[5]
             } for row in rows]
 
 def for_weekday_statistics(con):
@@ -87,7 +88,7 @@ def for_day_incidents_thru(con, start, end=None):
     """
     if end is None:
         end = start
-    query = """ SELECT Time, Crime, Latitude, Longitude, Description
+    query = """ SELECT rowid, Time, Crime, Latitude, Longitude, Description
                 FROM Crimes
                 WHERE Time BETWEEN ? AND ? """
     start = start.strftime('%Y-%m-%d 00:00:00')
