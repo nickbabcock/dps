@@ -35,7 +35,7 @@ def parse_page(html):
     dates = [row.find_all('td')[0] for row in first_row]
     dates = [datetime.strptime(d.get_text(), '%b %d %Y %I:%M %p') for d in dates]
     crimes = [row.find_all('td')[1] for row in first_row]
-    crimes = [crime.get_text() for crime in crimes]
+    crimes = [crime.get_text().strip() for crime in crimes]
     descriptions = [tr.get_text().strip() for tr in table.find_all('tr')[2::5]]
     locations = [tr.get_text().strip() for tr in table.find_all('tr')[1::5]]
     return zip(dates, crimes, locations, descriptions)
