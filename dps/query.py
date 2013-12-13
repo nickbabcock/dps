@@ -1,3 +1,14 @@
+from datetime import datetime, timedelta
+
+def parse_rows(rows):
+    return [{
+            'time': row[0],
+            'crime': row[1],
+            'latitude': row[2],
+            'longitude': row[3],
+            'description': row[4]
+            } for row in rows]
+
 def for_weekday_statistics(con):
     """
     Given a connection to the database, will return a dictionary of weekday
@@ -58,3 +69,28 @@ def for_week_statistics(con):
         week, number = row[:]
         data[int(week)] = int(number)
     return data
+
+def for_day_incidents(con, day):
+    """
+    Given a connection to the database and a day, will return all the incidents
+    that occurred on that day in a list of dictionaries
+    """
+    return for_day_incidents_thru(con, day)
+
+def for_day_incidents_thru(con, start, end=None):
+    """
+    Given a connection to the database, a start date, and an end date, will
+    return all the incidents that occurred between those two dates starting at
+    12 AM on the start date and ending at 11:59:59 PM on the end date. Returns
+    a list of dictionaries. If no end date is specified, it is assumed to be
+    the start date.
+    """
+    if end is None:
+        end = start
+    query = """ SELECT Time, Crime, Latitude, Longitude, Description
+                FROM Crimes
+                WHERE Time BETWEEN ? AND ? """
+    start = start.strftime('%Y-%m-%d 00:00:00')
+    end = end.strftime('%Y-%m-%d 23:59:59')
+    return parse_rows(con.execute(query, (start, end)))
+
