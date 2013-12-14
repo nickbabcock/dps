@@ -1,13 +1,10 @@
-from flask import Flask, g, jsonify, json
+from flask import Flask, g, jsonify, render_template
 from datetime import date
+from dps import parser, query
 import os
 import sqlite3
-import parser
-import query
 
 app = Flask(__name__)
-up = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-app.config['APPL366ICATION_ROOT'] = up
 app.config['DEBUG'] = True
 
 def get_db():
@@ -26,6 +23,10 @@ def api_statistics():
                     hour=query.for_hour_statistics(get_db()),
                     day=query.for_day_statistics(get_db()),
                     week=query.for_week_statistics(get_db()))
+
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
 
 @app.route('/api/v1/date/<int:year>/<int:month>/<int:day>')
 def day_incidents(year, month, day):
