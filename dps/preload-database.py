@@ -2,7 +2,12 @@ import glob
 import parser
 import sqlite3
 import requests
+import sys
 from itertools import groupby
+
+if __name__ != '__main__':
+    print 'Can only be used as a script'
+    sys.exit(0)
 
 # All dps data is assumed to have already been downloaded and extracted to the
 # following directory.
