@@ -3,5 +3,12 @@ CREATE TABLE Crimes(
     Time DATETIME,
     Longitude DOUBLE,
     Latitude DOUBLE,
-    Description TEXT
+    Description TEXT,
+    UNIQUE (Time, Longitude, Latitude) ON CONFLICT REPLACE
+);
+
+CREATE TABLE Locations(
+    Location TEXT,
+    Latitude DOUBLE,
+    Longitude DOUBLE
 );
