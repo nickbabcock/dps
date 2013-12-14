@@ -5,6 +5,7 @@ import requests
 import sys
 from itertools import groupby
 
+# If trying to import this file, exit. This file can only be ran as a script
 if __name__ != '__main__':
     print 'Can only be used as a script'
     sys.exit(0)
@@ -19,7 +20,7 @@ for file in glob.glob('../data/*.html'):
 with open('.database', 'r') as f:
     connection = sqlite3.connect(f.read().strip())
 
-# Keep track of requets made, if we have made 2000 - stop because google will
+# Keep track of requests made, if we have made 2000 - stop because google will
 # start denying at 2500
 reqs = 0
 
@@ -30,6 +31,9 @@ for location, group in groupby(data, key=lambda x: x[2]):
     group = list(group)
     location = parser.normalize_address(location)
     print location, len(group)
+
+    # Test to see if the location is already in the database, if it is use that
+    # data, else make a request to google and save the response
     query = 'SELECT Latitude, Longitude FROM Locations WHERE Location = ?'
     cur = connection.execute(query, (location,))
     rv = cur.fetchall()
