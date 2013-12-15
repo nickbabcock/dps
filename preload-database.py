@@ -1,8 +1,8 @@
 import glob
-import parser
 import sqlite3
 import requests
 import sys
+from dps import parser
 from itertools import groupby
 
 # If trying to import this file, exit. This file can only be ran as a script
