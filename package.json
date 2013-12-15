@@ -1,0 +1,15 @@
+{
+  "name": "dps",
+  "version": "0.1.0",
+  "description": "University of Michigan's DPS Incident Reports",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickbabcock/dps"
+  },
+  "author": "Nick Babcock",
+  "license": "MIT",
+  "gitHead": "22ca4c852ab3b1d31e900c6367e2069eabca5b1b",
+  "bugs": {
+    "url": "https://github.com/nickbabcock/dps/issues"
+  }
+}
