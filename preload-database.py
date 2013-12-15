@@ -17,7 +17,7 @@ for file in glob.glob('../data/*.html'):
     with open(file, 'r') as f:
         data.extend(parser.parse_page(f.read()))
 
-with open('.database', 'r') as f:
+with open('../.database', 'r') as f:
     connection = sqlite3.connect(f.read().strip())
 
 # Keep track of requests made, if we have made 2000 - stop because google will
