@@ -34,7 +34,7 @@ d3.json('/api/v1/statistics', function(error, json) {
         .attr('height', daySize)
         .attr('x', function(d) { return week(d) * daySize; })
         .attr('y', function(d) { return day(d) * daySize; })
-        .attr('fill', function(d) { return color(days[+dayOfYear(d)]);})
+        .attr('fill', function(d) { return color(days[+dayOfYear(d)]);});
 
     // Create informative text for the squares
     rects.append('title')
@@ -58,10 +58,10 @@ function monthPath(t0) {
   var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
       d0 = +day(t0), w0 = +week(t0),
       d1 = +day(t1), w1 = +week(t1);
-  return "M" + (w0 + 1) * daySize + "," + (d0 * daySize === 0 ? 1 : d0 * daySize)
-      + "H" + w0 * daySize + "V" + 7 * daySize
-      + "H" + w1 * daySize + "V" + (d1 + 1) * daySize
-      + "H" + (w1 + 1) * daySize + "V" + 1
-      + "H" + (w0 + 1) * daySize + "Z";
+  return "M" + (w0 + 1) * daySize + "," + (d0 * daySize === 0 ? 1 : d0 * daySize) + 
+    "H" + w0 * daySize + "V" + 7 * daySize +
+    "H" + w1 * daySize + "V" + (d1 + 1) * daySize +
+    "H" + (w1 + 1) * daySize + "V" + 1 +
+    "H" + (w0 + 1) * daySize + "Z";
 }
 

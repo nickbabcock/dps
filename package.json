@@ -11,5 +11,10 @@
   "gitHead": "22ca4c852ab3b1d31e900c6367e2069eabca5b1b",
   "bugs": {
     "url": "https://github.com/nickbabcock/dps/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3"
   }
 }
