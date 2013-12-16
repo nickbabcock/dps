@@ -1,6 +1,10 @@
 # Byte-compiled / optimized / DLL files
 .database
 env/
+data/
+node_modules/
+*.gz
+*.tar
 
 __pycache__/
 *.py[cod]
