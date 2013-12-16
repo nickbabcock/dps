@@ -40,11 +40,46 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+        uglify: {
+            js: {
+                options: {
+                    sourceMap: 'bin/static/js/statistics.min.map',
+                    sourceMappingURL: 'statistics.min.map',
+                    sourceMapRoot: 'orig',
+                    sourceMapPrefix: 2
+                },
+                files: {
+                    'bin/static/js/statistics.js': ['static/js/statistics.js']
+                }
+            }
+        },
+        copy: {
+            main: {
+                files: [{
+                    expand: true,
+                    dest: 'bin',
+                    src: [
+                        'dps/**/*.py',
+                        'dps.py', 
+                        'static/css/*.css', 
+                        'templates/**/*.html'
+                    ]
+                }, { 
+                    expand: true,
+                    cwd: 'static/js/',
+                    dest: 'bin/static/js/orig',
+                    src: ['*.js']
+                }]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-shell');
-    grunt.registerTask('default', ['jshint']);
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.registerTask('default', ['jshint', 'shell']);
+    grunt.registerTask('build', ['default', 'uglify', 'copy']);
 };
