@@ -4,3 +4,7 @@
     stroke: #000;
     stroke-width: 2px;
 }
+svg {
+    /* Padding to make sure that paths don't get clipped */
+    padding: 1em;
+}
