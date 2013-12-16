@@ -1,7 +1,6 @@
 import unittest
 import os
 import sys
-import requests
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from dps import parser

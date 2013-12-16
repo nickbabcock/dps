@@ -48,7 +48,7 @@ for location, group in groupby(data, key=lambda x: x[2]):
         if reqs == 2000:
             break
         if len(results) == 0:
-            raise Exception(address + ' is unknown!')
+            raise Exception(location + ' is unknown!')
         lat = float(results[0]['geometry']['location']['lat'])
         lng = float(results[0]['geometry']['location']['lng'])
         query = 'INSERT INTO Locations(Location, Latitude, Longitude) VALUES (?,?,?)'

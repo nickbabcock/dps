@@ -1,8 +1,6 @@
 from flask import Flask, g, jsonify, render_template
 from datetime import date
 from dps import parser, query
-import os
-import sqlite3
 
 app = Flask(__name__)
 app.config['DEBUG'] = True

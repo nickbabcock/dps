@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 def parse_rows(rows):
     """
     Given an iterator to database rows, will translate the values into a list
