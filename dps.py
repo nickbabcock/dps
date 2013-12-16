@@ -22,6 +22,10 @@ def api_statistics():
                     day=query.for_day_statistics(get_db()),
                     week=query.for_week_statistics(get_db()))
 
+@app.route('/')
+def home():
+    return render_template('base.html')
+
 @app.route('/statistics')
 def statistics():
     return render_template('statistics.html')
