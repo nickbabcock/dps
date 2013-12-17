@@ -33,6 +33,9 @@ function dayHeatMap(days) {
 
 function weekHeatMap(days) {
     var thisYear = (new Date()).getFullYear();
+
+    // Create an array for the number of weeks by grouping all the days by the
+    // week they occurr in, and then sum all the days by each week up.
     var weeks = _.chain(days).groupBy(function(val, index) {
         var date = new Date(thisYear, 0);
         date.setDate(index + 1);
