@@ -22,13 +22,12 @@ function lastOfYear() {
 
 function dayHeatMap(days) {
     var color = colorScheme(d3.max(days));
-    var dayOfYear = d3.time.format('%j');
     var dayFormat = d3.time.format('%b %e');
     d3.select('svg').selectAll('rect')
-        .attr('fill', function(d) { return color(days[+dayOfYear(d) - 1]);});
+        .attr('fill', function(d) { return color(days[d3.time.dayOfYear(d)]);});
 
     d3.select('svg').selectAll('title')
-        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d) - 1]; });
+        .text(function(d) { return dayFormat(d) + ": " + days[d3.time.dayOfYear(d)]; });
 }
 
 function weekHeatMap(days) {
