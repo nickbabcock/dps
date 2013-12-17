@@ -8,7 +8,14 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
+  <button class='btn-weeks' type='button'>Weeks</button>
+  <button class='btn-days' type='button'>Days</button>
   <svg></svg>
+  <p>
+Note on implementation: The close observer will be quick to point out the fact that not every year has the same number of days/weeks, and that days don't have a set week that they occur in. The point of these graphics isn't to be technically rigorous, but rather give general trends. The other option would be to display all data across all years, but collapsing all the data into a single year more easily gives rise to trend detection.
+  </p>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.min.js'></script>
+  <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js'></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type='text/javascript' src="{{ url_for('static', filename='js/statistics.js') }}"> </script>
 {% endblock %}

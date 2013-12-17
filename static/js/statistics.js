@@ -2,13 +2,33 @@
 // http://bl.ocks.org/mbostock/4063318
 // :)
 
-var dateFormat = d3.time.format('%b %e');
+var dayFormat = d3.time.format('%b %e');
 var week = d3.time.format('%U');
 var day = d3.time.format('%w');
 var dayOfYear = d3.time.format('%j');
 var yearWidth = 960;
 var yearHeight = 136;
 var daySize = 17;
+var days = [];
+
+// Returns the current year as a number
+function thisYear() {
+    return (new Date()).getFullYear();
+}
+
+function weekHeatMap(days) {
+    var weeks = _.chain(days).groupBy(function(val, index) {
+        var date = new Date(thisYear(), 0);
+        date.setDate(index + 1);
+        return +week(date);
+    }).map(function(val) { return d3.sum(val); }).value();
+
+    var color = colorScheme(d3.max(weeks));
+    d3.select('svg').selectAll('rect')
+        .attr('fill', function(d) { return color(weeks[+week(d)]);});
+}
+
+$('button.btn-weeks').on('click', weekHeatMap(days));
 
 var svg = d3.select('div.content')
     .select('svg')
@@ -17,16 +37,13 @@ var svg = d3.select('div.content')
     .attr('height', yearHeight);
 
 d3.json('/api/v1/statistics', function(error, json) {
-    var days = json.day;
-    var color = d3.scale.linear()
-        .domain([0, d3.max(days)])
-        .range(['#eeeeee', '#1e6823']);
+    days = json.day;
 
+    var color = colorScheme(d3.max(days));
     var rects = svg.selectAll('rect')
         .data(function(d) {
-            var thisYear = (new Date()).getFullYear();
-            return d3.time.days(new Date(thisYear, 0, 1),
-                                new Date(thisYear + 1, 0, 1));
+            return d3.time.days(new Date(thisYear(), 0, 1),
+                                new Date(thisYear() + 1, 0, 1));
         })
         .enter().append('rect')
         .attr('class', 'day')
@@ -38,14 +55,13 @@ d3.json('/api/v1/statistics', function(error, json) {
 
     // Create informative text for the squares
     rects.append('title')
-        .text(function(d) { return dateFormat(d) + ": " + days[+dayOfYear(d)]; });
+        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d)]; });
 
     // Create month outline
     svg.selectAll('.month')
         .data(function(d) {
-            var thisYear = (new Date()).getFullYear();
-            return d3.time.months(new Date(thisYear, 0, 1),
-                                  new Date(thisYear + 1, 0, 1));
+            return d3.time.months(new Date(thisYear(), 0, 1),
+                                  new Date(thisYear() + 1, 0, 1));
         })
         .enter().append('path')
         .attr('class', 'month')
@@ -65,3 +81,8 @@ function monthPath(t0) {
     "H" + (w0 + 1) * daySize + "Z";
 }
 
+function colorScheme(maxValue) {
+    return d3.scale.linear()
+        .domain([0, maxValue])
+        .range(['#eeeeee', '#1e6823']);
+}
