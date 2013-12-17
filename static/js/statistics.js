@@ -28,7 +28,21 @@ function weekHeatMap(days) {
         .attr('fill', function(d) { return color(weeks[+week(d)]);});
 }
 
-$('button.btn-weeks').on('click', weekHeatMap(days));
+function monthHeatMap(days) {
+    var monthFormat = d3.time.format('%m');
+    var months = _.chain(days).groupBy(function(val, index) {
+        var date = new Date(thisYear(), 0);
+        date.setDate(index + 1);
+        return +monthFormat(date);
+    }).map(function (val) { return d3.sum(val); }).value();
+
+    var color = colorScheme(d3.max(months));
+    d3.select('svg').selectAll('rect')
+        .attr('fill', function(d) { return color(months[+monthFormat(d) - 1]); });
+}
+
+$('button.btn-weeks').on('click', function() { weekHeatMap(days); });
+$('button.btn-months').on('click', function() { monthHeatMap(days); });
 
 var svg = d3.select('div.content')
     .select('svg')
