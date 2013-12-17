@@ -40,17 +40,16 @@ function weekHeatMap(days) {
     }).map(function(val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(weeks));
+    var span = d3.time.weeks(firstOfYear(), lastOfYear());
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(weeks[+week(d)]);});
     d3.select('svg').selectAll('title')
         .text(function(d) {
-            var span = d3.time.saturdays(firstOfYear(), lastOfYear());
             var index = _.sortedIndex(span, d);
-            var min = (index === 0) ? new Date(thisYear, 0, 0) : span[index - 1];
-            min = new Date(min.getTime());
-            min.setDate(min.getDate() + 1);
-
-            var max = (index === span.length) ? new Date(thisYear, 11, 31) : span[index];
+            var min = (index === 0) ? firstOfYear() : span[index - 1];
+            var max = (index === span.length) ? lastOfYear() : span[index];
+            max = new Date(max.getTime());
+            max.setDate(max.getDate() - 1);
             var weekFormat = d3.time.format('%b %e');
             return weekFormat(min) + ' - ' + weekFormat(max) +
                 ': ' + weeks[+week(d)];
