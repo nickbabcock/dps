@@ -72,6 +72,11 @@ function monthHeatMap(days) {
     var color = colorScheme(d3.max(months));
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(months[+monthFormat(d) - 1]); });
+
+    d3.select('svg').selectAll('title')
+        .text(function(d) {
+            return d3.time.format('%B')(d) + ': ' + months[monthFormat(d) - 1];
+        });
 }
 
 $('button.btn-weeks').on('click', function() { weekHeatMap(days); });
