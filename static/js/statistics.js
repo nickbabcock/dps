@@ -7,6 +7,7 @@ var yearWidth = 960;
 var yearHeight = 136;
 var daySize = 17;
 var days = [];
+var weekdays = [];
 
 // Returns the current year as a number
 function firstOfYear() {
@@ -79,9 +80,26 @@ function monthHeatMap(days) {
         });
 }
 
+function weekdayHeatMap(days) {
+    var weekday = d3.time.format('%w');
+    var color = colorScheme(d3.max(weekdays));
+
+    // change the domain of the scale slightly so the differences between
+    // days is noticeable -- but not deceiving at the same time
+    color.domain([d3.min(weekdays) / 2, d3.max(weekdays)]);
+    d3.select('svg').selectAll('rect')
+        .attr('fill', function(d) { return color(weekdays[+weekday(d)]); });
+
+    d3.select('svg').selectAll('title')
+        .text(function(d) {
+            return d3.time.format('%A')(d) + ': ' + weekdays[+weekday(d)];
+        });
+}
+
 $('button.btn-weeks').on('click', function() { weekHeatMap(days); });
 $('button.btn-months').on('click', function() { monthHeatMap(days); });
 $('button.btn-days').on('click', function() { dayHeatMap(days); });
+$('button.btn-weekday').on('click', function() { weekdayHeatMap(days); });
 
 var svg = d3.select('div.content')
     .select('svg')
@@ -110,6 +128,16 @@ svg.selectAll('.month')
 
 d3.json('/api/v1/statistics', function(error, json) {
     days = json.day;
+    weekdays = [
+        json.weekday.Sunday,
+        json.weekday.Monday,
+        json.weekday.Tuesday,
+        json.weekday.Wednesday,
+        json.weekday.Thursday,
+        json.weekday.Friday,
+        json.weekday.Saturday
+    ];
+
     dayHeatMap(days);
     d3.select('svg').selectAll('rect').classed('day-absent', false);
 });
