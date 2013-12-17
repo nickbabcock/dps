@@ -19,7 +19,7 @@ function thisYear() {
 function dayHeatMap(days) {
     var color = colorScheme(d3.max(days));
     d3.select('svg').selectAll('rect')
-        .attr('fill', function(d) { return color(days[+dayOfYear(d)]);});
+        .attr('fill', function(d) { return color(days[+dayOfYear(d) - 1]);});
 }
 
 function weekHeatMap(days) {
@@ -76,7 +76,7 @@ d3.json('/api/v1/statistics', function(error, json) {
 
     // Create informative text for the squares
     rects.append('title')
-        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d)]; });
+        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d) - 1]; });
 
     // Create month outline
     svg.selectAll('.month')
