@@ -10,8 +10,14 @@ var daySize = 17;
 var days = [];
 
 // Returns the current year as a number
-function thisYear() {
-    return (new Date()).getFullYear();
+function firstOfYear() {
+    var year = (new Date()).getFullYear();
+    return new Date(year, 0);
+}
+
+function lastOfYear() {
+    var year = (new Date()).getFullYear();
+    return new Date(year + 1, 0);
 }
 
 function dayHeatMap(days) {
@@ -26,8 +32,9 @@ function dayHeatMap(days) {
 }
 
 function weekHeatMap(days) {
+    var thisYear = (new Date()).getFullYear();
     var weeks = _.chain(days).groupBy(function(val, index) {
-        var date = new Date(thisYear(), 0);
+        var date = new Date(thisYear, 0);
         date.setDate(index + 1);
         return +week(date);
     }).map(function(val) { return d3.sum(val); }).value();
@@ -37,16 +44,15 @@ function weekHeatMap(days) {
         .attr('fill', function(d) { return color(weeks[+week(d)]);});
     d3.select('svg').selectAll('title')
         .text(function(d) {
-            var span = d3.time.saturdays(new Date(thisYear(), 0),
-                                         new Date(thisYear() + 1, 0));
+            var span = d3.time.saturdays(firstOfYear(), lastOfYear());
             var index = _.sortedIndex(span, d);
-            var min = (index === 0) ? new Date(thisYear(), 0, 0) : span[index - 1];
+            var min = (index === 0) ? new Date(thisYear, 0, 0) : span[index - 1];
             min = new Date(min.getTime());
             min.setDate(min.getDate() + 1);
 
-            var max = (index === span.length) ? new Date(thisYear(), 11, 31) : span[index];
+            var max = (index === span.length) ? new Date(thisYear, 11, 31) : span[index];
             var weekFormat = d3.time.format('%b %e');
-            return weekFormat(min) + ' -> ' + weekFormat(max) +
+            return weekFormat(min) + ' - ' + weekFormat(max) +
                 ': ' + weeks[+week(d)];
         });
 }
@@ -54,7 +60,7 @@ function weekHeatMap(days) {
 function monthHeatMap(days) {
     var monthFormat = d3.time.format('%m');
     var months = _.chain(days).groupBy(function(val, index) {
-        var date = new Date(thisYear(), 0);
+        var date = firstOfYear();
         date.setDate(index + 1);
         return +monthFormat(date);
     }).map(function (val) { return d3.sum(val); }).value();
@@ -75,10 +81,7 @@ var svg = d3.select('div.content')
     .attr('height', yearHeight);
 
 var rects = svg.selectAll('rect')
-    .data(function(d) {
-        return d3.time.days(new Date(thisYear(), 0, 1),
-                            new Date(thisYear() + 1, 0, 1));
-    })
+    .data(function(d) { return d3.time.days(firstOfYear(), lastOfYear()); })
     .enter().append('rect')
     .attr('class', 'day day-absent')
     .attr('width', daySize)
@@ -91,10 +94,7 @@ rects.append('title');
 
 // Create month outline
 svg.selectAll('.month')
-    .data(function(d) {
-        return d3.time.months(new Date(thisYear(), 0, 1),
-                              new Date(thisYear() + 1, 0, 1));
-    })
+    .data(function(d) { return d3.time.months(firstOfYear(), lastOfYear()); })
     .enter().append('path')
     .attr('class', 'month')
     .attr('d', monthPath);
