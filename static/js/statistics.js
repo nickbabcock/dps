@@ -39,7 +39,7 @@ function weekHeatMap(days) {
     var thisYear = (new Date()).getFullYear();
 
     // Create an array for the number of weeks by grouping all the days by the
-    // week they occurr in, and then sum all the days by each week up.
+    // week they occur in, and then sum all the days by each week up.
     var weeks = _.chain(days).groupBy(function(val, index) {
         return d3.time.weekOfYear(dayToDate(index));
     }).map(function(val) { return d3.sum(val); }).value();
@@ -48,6 +48,8 @@ function weekHeatMap(days) {
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(weeks[d3.time.weekOfYear(d)]);});
 
+    // For each column, display the week (starting Sunday and ending Saturday)
+    // range and the number of incidents that occurred in that interval
     d3.select('svg').selectAll('title')
         .text(function(d) {
             var prevSunday = d3.time.sunday(d);
