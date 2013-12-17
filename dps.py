@@ -1,4 +1,4 @@
-from flask import Flask, g, jsonify, render_template
+from flask import Flask, g, jsonify, render_template, request
 from datetime import date
 from dps import parser, query
 
@@ -48,6 +48,12 @@ def day_incidents_thru(year, month, day, year2, month2, day2):
 @app.route('/api/v1/category/<category>')
 def category(category):
     return jsonify(result=query.for_category(get_db(), category))
+
+@app.route('/api/v1/latest')
+def latest():
+    take = request.args.get('take', 10)
+    skip = request.args.get('skip', 0)
+    return jsonify(result=query.for_latest(get_db(), take, skip))
 
 if __name__ == '__main__':
     app.run('0.0.0.0')

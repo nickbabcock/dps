@@ -117,3 +117,14 @@ def for_category(con, category):
                 FROM CRIMES
                 WHERE Crime = ? """
     return parse_rows(con.execute(query, (category,)))
+
+def for_latest(con, take, skip):
+    """
+    Given a connection to the database, query will return at most the specified
+    number of incidents, skipping the latest specified number of rows as well
+    """
+    query = """ SELECT rowid, Time, Crime, Latitude, Longitude, Description
+                FROM Crimes
+                ORDER BY Time DESC
+                LIMIT ? OFFSET ? """
+    return parse_rows(con.execute(query, (take, skip)))
