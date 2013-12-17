@@ -35,6 +35,20 @@ function weekHeatMap(days) {
     var color = colorScheme(d3.max(weeks));
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(weeks[+week(d)]);});
+    d3.select('svg').selectAll('title')
+        .text(function(d) {
+            var span = d3.time.saturdays(new Date(thisYear(), 0),
+                                         new Date(thisYear() + 1, 0));
+            var index = _.sortedIndex(span, d);
+            var min = (index === 0) ? new Date(thisYear(), 0, 0) : span[index - 1];
+            min = new Date(min.getTime());
+            min.setDate(min.getDate() + 1);
+
+            var max = (index === span.length) ? new Date(thisYear(), 11, 31) : span[index];
+            var weekFormat = d3.time.format('%b %e');
+            return weekFormat(min) + ' -> ' + weekFormat(max) +
+                ': ' + weeks[+week(d)];
+        });
 }
 
 function monthHeatMap(days) {
