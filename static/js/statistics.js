@@ -29,15 +29,19 @@ function dayHeatMap(days) {
         .text(function(d) { return dayFormat(d) + ": " + days[d3.time.dayOfYear(d)]; });
 }
 
+function dayToDate(dayIndex) {
+    var result = firstOfYear();
+    result.setDate(result.getDate() + dayIndex);
+    return result;
+}
+
 function weekHeatMap(days) {
     var thisYear = (new Date()).getFullYear();
 
     // Create an array for the number of weeks by grouping all the days by the
     // week they occurr in, and then sum all the days by each week up.
     var weeks = _.chain(days).groupBy(function(val, index) {
-        var date = new Date(thisYear, 0);
-        date.setDate(index + 1);
-        return d3.time.weekOfYear(date);
+        return d3.time.weekOfYear(dayToDate(index));
     }).map(function(val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(weeks));
@@ -60,9 +64,7 @@ function weekHeatMap(days) {
 function monthHeatMap(days) {
     var monthFormat = d3.time.format('%m');
     var months = _.chain(days).groupBy(function(val, index) {
-        var date = firstOfYear();
-        date.setDate(index + 1);
-        return +monthFormat(date);
+        return +monthFormat(dayToDate(index));
     }).map(function (val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(months));
