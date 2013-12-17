@@ -2,7 +2,6 @@
 // http://bl.ocks.org/mbostock/4063318
 // :)
 
-var week = d3.time.format('%U');
 var day = d3.time.format('%w');
 var yearWidth = 960;
 var yearHeight = 136;
@@ -38,12 +37,12 @@ function weekHeatMap(days) {
     var weeks = _.chain(days).groupBy(function(val, index) {
         var date = new Date(thisYear, 0);
         date.setDate(index + 1);
-        return +week(date);
+        return d3.time.weekOfYear(date);
     }).map(function(val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(weeks));
     d3.select('svg').selectAll('rect')
-        .attr('fill', function(d) { return color(weeks[+week(d)]);});
+        .attr('fill', function(d) { return color(weeks[d3.time.weekOfYear(d)]);});
 
     d3.select('svg').selectAll('title')
         .text(function(d) {
@@ -54,7 +53,7 @@ function weekHeatMap(days) {
             var min = prevSunday < firstOfYear() ? firstOfYear() : prevSunday;
             var max = nextSaturday > lastOfYear() ? lastOfYear() : nextSaturday;
             return weekFormat(min) + ' - ' + weekFormat(max) +
-                ': ' + weeks[+week(d)];
+                ': ' + weeks[d3.time.weekOfYear(d)];
         });
 }
 
@@ -87,7 +86,7 @@ var rects = svg.selectAll('rect')
     .attr('class', 'day day-absent')
     .attr('width', daySize)
     .attr('height', daySize)
-    .attr('x', function(d) { return week(d) * daySize; })
+    .attr('x', function(d) { return d3.time.weekOfYear(d) * daySize; })
     .attr('y', function(d) { return day(d) * daySize; });
 
 // Create informative text for the squares
@@ -110,8 +109,8 @@ d3.json('/api/v1/statistics', function(error, json) {
 // the month and give a nice outline
 function monthPath(t0) {
   var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-      d0 = +day(t0), w0 = +week(t0),
-      d1 = +day(t1), w1 = +week(t1);
+      d0 = +day(t0), w0 = d3.time.weekOfYear(t0),
+      d1 = +day(t1), w1 = d3.time.weekOfYear(t1);
   return "M" + (w0 + 1) * daySize + "," + (d0 * daySize === 0 ? 1 : d0 * daySize) + 
     "H" + w0 * daySize + "V" + 7 * daySize +
     "H" + w1 * daySize + "V" + (d1 + 1) * daySize +
