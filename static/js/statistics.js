@@ -16,6 +16,12 @@ function thisYear() {
     return (new Date()).getFullYear();
 }
 
+function dayHeatMap(days) {
+    var color = colorScheme(d3.max(days));
+    d3.select('svg').selectAll('rect')
+        .attr('fill', function(d) { return color(days[+dayOfYear(d)]);});
+}
+
 function weekHeatMap(days) {
     var weeks = _.chain(days).groupBy(function(val, index) {
         var date = new Date(thisYear(), 0);
@@ -43,6 +49,7 @@ function monthHeatMap(days) {
 
 $('button.btn-weeks').on('click', function() { weekHeatMap(days); });
 $('button.btn-months').on('click', function() { monthHeatMap(days); });
+$('button.btn-days').on('click', function() { dayHeatMap(days); });
 
 var svg = d3.select('div.content')
     .select('svg')
@@ -53,7 +60,6 @@ var svg = d3.select('div.content')
 d3.json('/api/v1/statistics', function(error, json) {
     days = json.day;
 
-    var color = colorScheme(d3.max(days));
     var rects = svg.selectAll('rect')
         .data(function(d) {
             return d3.time.days(new Date(thisYear(), 0, 1),
@@ -64,8 +70,9 @@ d3.json('/api/v1/statistics', function(error, json) {
         .attr('width', daySize)
         .attr('height', daySize)
         .attr('x', function(d) { return week(d) * daySize; })
-        .attr('y', function(d) { return day(d) * daySize; })
-        .attr('fill', function(d) { return color(days[+dayOfYear(d)]);});
+        .attr('y', function(d) { return day(d) * daySize; });
+
+    dayHeatMap(days);
 
     // Create informative text for the squares
     rects.append('title')
