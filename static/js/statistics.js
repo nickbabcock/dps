@@ -43,17 +43,17 @@ function weekHeatMap(days) {
     }).map(function(val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(weeks));
-    var span = d3.time.weeks(firstOfYear(), lastOfYear());
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(weeks[+week(d)]);});
+
     d3.select('svg').selectAll('title')
         .text(function(d) {
-            var index = _.sortedIndex(span, d);
-            var min = (index === 0) ? firstOfYear() : span[index - 1];
-            var max = (index === span.length) ? lastOfYear() : span[index];
-            max = new Date(max.getTime());
-            max.setDate(max.getDate() - 1);
+            var prevSunday = d3.time.sunday(d);
+            var nextSaturday = new Date(prevSunday.getTime());
+            nextSaturday.setDate(prevSunday.getDate() + 6);
             var weekFormat = d3.time.format('%b %e');
+            var min = prevSunday < firstOfYear() ? firstOfYear() : prevSunday;
+            var max = nextSaturday > lastOfYear() ? lastOfYear() : nextSaturday;
             return weekFormat(min) + ' - ' + weekFormat(max) +
                 ': ' + weeks[+week(d)];
         });
