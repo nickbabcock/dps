@@ -107,3 +107,13 @@ def for_incident(con, rowid):
                 WHERE rowid = ? """
     results = parse_rows(con.execute(query, (rowid,)))
     return results[0] if len(results) else None
+
+def for_category(con, category):
+    """
+    Given a connection to the database and a category, retrieve all the rows
+    that have the categorized incident
+    """
+    query = """ SELECT rowid, Time, Crime, Latitude, Longitude, Description
+                FROM CRIMES
+                WHERE Crime = ? """
+    return parse_rows(con.execute(query, (category,)))

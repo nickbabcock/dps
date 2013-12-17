@@ -45,5 +45,9 @@ def day_incidents_thru(year, month, day, year2, month2, day2):
     if end < start: start, end = end,start
     return jsonify(result=query.for_day_incidents_thru(get_db(), start, end))
 
+@app.route('/api/v1/category/<category>')
+def category(category):
+    return jsonify(result=query.for_category(get_db(), category))
+
 if __name__ == '__main__':
     app.run('0.0.0.0')
