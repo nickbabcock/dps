@@ -66,7 +66,7 @@ var rects = svg.selectAll('rect')
                             new Date(thisYear() + 1, 0, 1));
     })
     .enter().append('rect')
-    .attr('class', 'day')
+    .attr('class', 'day day-absent')
     .attr('width', daySize)
     .attr('height', daySize)
     .attr('x', function(d) { return week(d) * daySize; })
@@ -88,6 +88,7 @@ svg.selectAll('.month')
 d3.json('/api/v1/statistics', function(error, json) {
     days = json.day;
     dayHeatMap(days);
+    d3.select('svg').selectAll('rect').classed('day-absent', false);
 });
 
 // Given a date that represents a month, will create a path that will encompass

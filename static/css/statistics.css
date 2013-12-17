@@ -1,4 +1,5 @@
-.day { stroke: #ccc }
+.day { stroke: #ccc; }
+.day-absent { fill: #eeeeee; }
 .month {
     fill: none;
     stroke: #000;
