@@ -2,10 +2,8 @@
 // http://bl.ocks.org/mbostock/4063318
 // :)
 
-var dayFormat = d3.time.format('%b %e');
 var week = d3.time.format('%U');
 var day = d3.time.format('%w');
-var dayOfYear = d3.time.format('%j');
 var yearWidth = 960;
 var yearHeight = 136;
 var daySize = 17;
@@ -18,8 +16,13 @@ function thisYear() {
 
 function dayHeatMap(days) {
     var color = colorScheme(d3.max(days));
+    var dayOfYear = d3.time.format('%j');
+    var dayFormat = d3.time.format('%b %e');
     d3.select('svg').selectAll('rect')
         .attr('fill', function(d) { return color(days[+dayOfYear(d) - 1]);});
+
+    d3.select('svg').selectAll('title')
+        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d) - 1]; });
 }
 
 function weekHeatMap(days) {
@@ -57,36 +60,34 @@ var svg = d3.select('div.content')
     .attr('width', yearWidth)
     .attr('height', yearHeight);
 
+var rects = svg.selectAll('rect')
+    .data(function(d) {
+        return d3.time.days(new Date(thisYear(), 0, 1),
+                            new Date(thisYear() + 1, 0, 1));
+    })
+    .enter().append('rect')
+    .attr('class', 'day')
+    .attr('width', daySize)
+    .attr('height', daySize)
+    .attr('x', function(d) { return week(d) * daySize; })
+    .attr('y', function(d) { return day(d) * daySize; });
+
+// Create informative text for the squares
+rects.append('title');
+
+// Create month outline
+svg.selectAll('.month')
+    .data(function(d) {
+        return d3.time.months(new Date(thisYear(), 0, 1),
+                              new Date(thisYear() + 1, 0, 1));
+    })
+    .enter().append('path')
+    .attr('class', 'month')
+    .attr('d', monthPath);
+
 d3.json('/api/v1/statistics', function(error, json) {
     days = json.day;
-
-    var rects = svg.selectAll('rect')
-        .data(function(d) {
-            return d3.time.days(new Date(thisYear(), 0, 1),
-                                new Date(thisYear() + 1, 0, 1));
-        })
-        .enter().append('rect')
-        .attr('class', 'day')
-        .attr('width', daySize)
-        .attr('height', daySize)
-        .attr('x', function(d) { return week(d) * daySize; })
-        .attr('y', function(d) { return day(d) * daySize; });
-
     dayHeatMap(days);
-
-    // Create informative text for the squares
-    rects.append('title')
-        .text(function(d) { return dayFormat(d) + ": " + days[+dayOfYear(d) - 1]; });
-
-    // Create month outline
-    svg.selectAll('.month')
-        .data(function(d) {
-            return d3.time.months(new Date(thisYear(), 0, 1),
-                                  new Date(thisYear() + 1, 0, 1));
-        })
-        .enter().append('path')
-        .attr('class', 'month')
-        .attr('d', monthPath);
 });
 
 // Given a date that represents a month, will create a path that will encompass
