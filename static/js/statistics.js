@@ -129,11 +129,14 @@ function createHeatMapSkeleton() {
         .attr('d', function(d) { return monthPath(d, daySize); });
 }
 
-function clockPie(data) {
-    return _.map(data, function(val, index, list) {
+// Given the number of equivalent slices a pie should have, this function will
+// calculate the start and end angle for each slice with the start angle
+// increasing
+function clockPie(slices) {
+    return _.map(_.range(slices), function(val, index, list) {
         return {
             data: index,
-            value: val,
+            value: 1,
             startAngle: ((2 * Math.PI) / list.length ) * index,
             endAngle: ((2 * Math.PI) / list.length ) * (index + 1)
         };
@@ -144,7 +147,6 @@ function createClock(id, text) {
     var width = 300;
     var height = 300;
     var radius = Math.min(width, height) / 2;
-    var data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
     var arc = d3.svg.arc().outerRadius(radius - 10);
     var svg = d3.select(id)
@@ -163,7 +165,7 @@ function createClock(id, text) {
 
     // Setup the slices.
     var g = svg.selectAll('.arc')
-        .data(clockPie(data))
+        .data(clockPie(12))
         .enter().append('g')
         .attr('class', 'absent arc');
 
