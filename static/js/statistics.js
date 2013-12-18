@@ -129,6 +129,55 @@ function createHeatMapSkeleton() {
         .attr('d', function(d) { return monthPath(d, daySize); });
 }
 
+function clockPie(data) {
+    return _.map(data, function(val, index, list) {
+        return {
+            data: index,
+            value: val,
+            startAngle: ((2 * Math.PI) / list.length ) * index,
+            endAngle: ((2 * Math.PI) / list.length ) * (index + 1)
+        };
+    });
+}
+
+function createClock(id, text) {
+    var width = 300;
+    var height = 300;
+    var radius = Math.min(width, height) / 2;
+    var data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+    var arc = d3.svg.arc().outerRadius(radius - 10);
+    var pie = d3.layout.pie().value(function(d) { return d.value; });
+    var svg = d3.select(id)
+        .attr('width', width)
+        .attr('height', height);
+
+    svg.append('text')
+        .attr('x', (width / 2))
+        .attr('text-anchor', 'middle')
+        .text(text);
+
+    svg = svg.append('g')
+        .attr('transform', 'translate(' + width / 2 + ',' +  height / 2 + ')');
+
+
+    var g = svg.selectAll('.arc')
+        .data(clockPie(data))
+        .enter().append('g')
+        .attr('class', 'absent arc');
+
+    g.append('path')
+        .attr('d', arc);
+}
+
+function clockHeatMap(hours) {
+    var color = colorScheme(d3.max(hours));
+    d3.select('#clock-morning').selectAll('path')
+        .style('fill', function(d) { return color(hours[d.data]); });
+    d3.select('#clock-afternoon').selectAll('path')
+        .style('fill', function(d) { return color(hours[d.data + 12]); });
+}
+
 // Given a date that represents a month, will create a path that will encompass
 // the month and give a nice outline
 function monthPath(t0, daySize) {
@@ -149,6 +198,8 @@ function colorScheme(maxValue) {
 }
 
 createHeatMapSkeleton();
+createClock('#clock-morning', 'Morning');
+createClock('#clock-afternoon', 'Afternoon');
 
 d3.json('/api/v1/statistics', function(error, json) {
     hookUpEvents();
@@ -164,6 +215,7 @@ d3.json('/api/v1/statistics', function(error, json) {
     ];
 
     dayHeatMap(days);
+    clockHeatMap(json.hour);
     d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
 });
 
