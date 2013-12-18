@@ -173,9 +173,13 @@ function createClock(id, text) {
 function clockHeatMap(hours) {
     var color = colorScheme(d3.max(hours));
     d3.select('#clock-morning').selectAll('path')
-        .style('fill', function(d) { return color(hours[d.data]); });
+        .style('fill', function(d) { return color(hours[d.data]); })
+        .append('title')
+        .text(function(d) { return (d.data + 1) + ' AM: ' + hours[d.data]; });
     d3.select('#clock-afternoon').selectAll('path')
-        .style('fill', function(d) { return color(hours[d.data + 12]); });
+        .style('fill', function(d) { return color(hours[d.data + 12]); })
+        .append('title')
+        .text(function(d) { return (d.data + 1) + ' PM: ' + hours[d.data + 12];});
 }
 
 // Given a date that represents a month, will create a path that will encompass
