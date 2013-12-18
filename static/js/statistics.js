@@ -19,10 +19,10 @@ function lastOfYear() {
 function dayHeatMap(days) {
     var color = colorScheme(d3.max(days));
     var dayFormat = d3.time.format('%b %e');
-    d3.select('svg').selectAll('rect')
+    d3.select('#heatMap').selectAll('rect')
         .attr('fill', function(d) { return color(days[d3.time.dayOfYear(d)]);});
 
-    d3.select('svg').selectAll('title')
+    d3.select('#heatMap').selectAll('title')
         .text(function(d) { return dayFormat(d) + ": " + days[d3.time.dayOfYear(d)]; });
 }
 
@@ -44,12 +44,12 @@ function weekHeatMap(days) {
     }).map(function(val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(weeks));
-    d3.select('svg').selectAll('rect')
+    d3.select('#heatMap').selectAll('rect')
         .attr('fill', function(d) { return color(weeks[d3.time.weekOfYear(d)]);});
 
     // For each column, display the week (starting Sunday and ending Saturday)
     // range and the number of incidents that occurred in that interval
-    d3.select('svg').selectAll('title')
+    d3.select('#heatMap').selectAll('title')
         .text(function(d) {
             var prevSunday = d3.time.sunday(d);
             var nextSaturday = new Date(prevSunday.getTime());
@@ -69,10 +69,10 @@ function monthHeatMap(days) {
     }).map(function (val) { return d3.sum(val); }).value();
 
     var color = colorScheme(d3.max(months));
-    d3.select('svg').selectAll('rect')
+    d3.select('#heatMap').selectAll('rect')
         .attr('fill', function(d) { return color(months[+monthFormat(d) - 1]); });
 
-    d3.select('svg').selectAll('title')
+    d3.select('#heatMap').selectAll('title')
         .text(function(d) {
             return d3.time.format('%B')(d) + ': ' + months[monthFormat(d) - 1];
         });
@@ -84,10 +84,10 @@ function weekdayHeatMap(days) {
     // change the domain of the scale slightly so the differences between
     // days is noticeable -- but not deceiving at the same time
     color.domain([d3.min(weekdays) / 2, d3.max(weekdays)]);
-    d3.select('svg').selectAll('rect')
+    d3.select('#heatMap').selectAll('rect')
         .attr('fill', function(d) { return color(weekdays[d.getDay()]); });
 
-    d3.select('svg').selectAll('title')
+    d3.select('#heatMap').selectAll('title')
         .text(function(d) {
             return d3.time.format('%A')(d) + ': ' + weekdays[d.getDay()];
         });
@@ -104,8 +104,7 @@ function createHeatMapSkeleton() {
     var yearWidth = 960;
     var yearHeight = 136;
     var daySize = 17;
-    var svg = d3.select('div.content')
-        .select('svg')
+    var svg = d3.select('#heatMap')
         .data(d3.range(366))
         .attr('width', yearWidth)
         .attr('height', yearHeight);
@@ -165,7 +164,7 @@ d3.json('/api/v1/statistics', function(error, json) {
     ];
 
     dayHeatMap(days);
-    d3.select('svg').selectAll('rect').classed('day-absent', false);
+    d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
 });
 
 
