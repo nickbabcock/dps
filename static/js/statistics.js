@@ -147,38 +147,42 @@ function createClock(id, text) {
     var data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
     var arc = d3.svg.arc().outerRadius(radius - 10);
-    var pie = d3.layout.pie().value(function(d) { return d.value; });
     var svg = d3.select(id)
         .attr('width', width)
         .attr('height', height);
 
+    // Add chart title
     svg.append('text')
         .attr('x', (width / 2))
         .attr('text-anchor', 'middle')
         .text(text);
 
+    // Make everything in group relative to the center of the graphic
     svg = svg.append('g')
         .attr('transform', 'translate(' + width / 2 + ',' +  height / 2 + ')');
 
-
+    // Setup the slices.
     var g = svg.selectAll('.arc')
         .data(clockPie(data))
         .enter().append('g')
         .attr('class', 'absent arc');
 
-    g.append('path')
-        .attr('d', arc);
+    // Create the slices
+    g.append('path').attr('d', arc);
+
+    // Create the tooltips
+    g.selectAll('path').append('title');
 }
 
 function clockHeatMap(hours) {
     var color = colorScheme(d3.max(hours));
     d3.select('#clock-morning').selectAll('path')
         .style('fill', function(d) { return color(hours[d.data]); })
-        .append('title')
+        .selectAll('title')
         .text(function(d) { return (d.data + 1) + ' AM: ' + hours[d.data]; });
     d3.select('#clock-afternoon').selectAll('path')
         .style('fill', function(d) { return color(hours[d.data + 12]); })
-        .append('title')
+        .selectAll('title')
         .text(function(d) { return (d.data + 1) + ' PM: ' + hours[d.data + 12];});
 }
 
