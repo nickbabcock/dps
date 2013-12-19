@@ -3,6 +3,8 @@
 // :)
 
 (function() {
+    'use strict';
+
     var days = [];
     var weekdays = [];
 
