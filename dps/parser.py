@@ -109,7 +109,6 @@ def scrape(frm=date.today(), until=date(2000, 1, 23)):
     while frm >= until and len(get_coordinates_from_address) < 2000:
         data = get_data(frm)
         store_data(connection, data)
-        print "Processed {0:%m/%d/%Y} {1}".format(frm, len(get_coordinates_from_address))
         frm -= timedelta(1)
 
 def connect_db():
