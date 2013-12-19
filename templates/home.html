@@ -2,17 +2,27 @@
 
 {% block title %}Home{% endblock %}
 
+{% block head %}
+  {{  super() }}
+  <link rel='stylesheet' href="{{ url_for('static', filename='css/dps.css') }}"/>
+{% endblock %}
+
+
 {% block content %}
-  <img id='map'/>
-  <ul data-bind='foreach: incidents'>
-    <li>
-      <div>
-        <span data-bind='text: crime'></span>
-        <span data-bind='text: time'></span>
-        <p data-bind='text: description'></p>
-      </div>
-    </li>
-  </ul>
+  <div class='controller'>
+    <ul class='incidents' data-bind='foreach: incidents'>
+      <li>
+        <div>
+          <div data-bind='text: crime'></div>
+          <span data-bind='text: time'></span>
+          <p class='less-important' data-bind='text: description'></p>
+        </div>
+      </li>
+    </ul>
+    <div class='map'>
+      <img id='map'/>
+    </div>
+  </div>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js'></script>
   <script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.5/gmaps.min.js'></script>
