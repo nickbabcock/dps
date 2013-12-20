@@ -25,6 +25,9 @@
         this.incidents = ko.observableArray();
         this.page = ko.observable(0);
         this.pageSize = ko.observable(10);
+
+        // Transform the longitude and latitude stored in the incidents into
+        // a format that google maps can use.
         this.markers = ko.computed(function() {
             var markers = [];
             var results = this.incidents();
@@ -34,6 +37,9 @@
 
             return markers;
         }, this);
+
+        // Whenever there is a page change, request additional information from
+        // the server and show a new map
         this.latestRequest = ko.computed(function() {
             var obj = { take: this.pageSize(), skip: this.page() * this.pageSize() };
             this.incidents([]);
@@ -47,14 +53,17 @@
             });
         }, this);
 
+        // Advance to the next page of incidents
         this.nextPage = function() {
             this.page(this.page() + 1);
         };
 
+        // Advance to the previous page of incidents
         this.prevPage = function() {
             this.page(this.page() - 1);
         };
 
+        // When an incident item has been clicked, center it on the map
         this.centerOnIncident = function(incident) {
             gmap(self.markers(), incident.latitude, incident.longitude);
         };
