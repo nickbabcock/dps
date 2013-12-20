@@ -232,6 +232,8 @@
         this.selectedCategory = ko.observable();
         this.selectedHeatMap = ko.observable('Months');
 
+        // Returns a string of categories that the user can select to view the
+        // data on. Since null represents all categories, replace it with 'All'
         this.categories = ko.computed(function() {
             var result = _.pluck(this.data(), 'category');
             result =  _.map(result, function(val) { return val === null ? 'All' : val; });
@@ -239,6 +241,8 @@
             return result;
         }, this);
 
+        // Returns the statistics that are associated with the selected
+        // category
         this.selectedData = ko.computed(function() {
             if (!this.selectedCategory()) {
                 return null;
@@ -252,6 +256,7 @@
             }, this);
         }, this);
 
+        // Returns the weekday statistics associated with the selected category
         this.weekdays = ko.computed(function() {
             var display = this.selectedData();
             return !display || [
@@ -265,16 +270,19 @@
             ];
         }, this);
 
+        // Returns the day statistics associated with the selected category
         this.days = ko.computed(function() {
             var display = this.selectedData();
             return !display || display.day;
         }, this);
 
+        // Returns the hour statistics associated with the selected category
         this.hours = ko.computed(function() {
             var display = this.selectedData();
             return !display || display.hour;
         }, this);
 
+        // When the selected category has changed, update all the heat maps
         this.refreshData = ko.computed(function() {
             if (!this.selectedCategory()) {
                 return;
