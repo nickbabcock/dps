@@ -19,40 +19,44 @@ def for_statistics(con, time, category=None):
     rows that contain a time and the count of how many incidents ocurred at
     that time
     """
-    query = """ SELECT strftime("{time}", Time), COUNT(*) FROM Crimes 
-                GROUP BY strftime("{time}", Time) """ 
+    
+    query = 'SELECT strftime("{time}", Time), COUNT(*) FROM Crimes '
     if category:
-        query += ' WHERE Crime = {category}'
+        query += ' WHERE Crime = ?'
+        query += ' GROUP BY strftime("{time}", Time)'
+        query = query.format(time=time)
+        return con.execute(query, (category,))
+    else:
+        query += ' GROUP BY strftime("{time}", Time)'
+        query = query.format(time=time)
+        return con.execute(query)
 
-    query = query.format(time=time, category=category)
-    return con.execute(query)
-
-def for_weekday_statistics(con):
+def for_weekday_statistics(con, category=None):
     """
     Given a connection to the database, will return a dictionary of weekday
     names and the number of incidents that have occurred on that day.
     """
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    rows = for_statistics(con, '%w')
+    rows = for_statistics(con, '%w', category)
 
     # Convert the format that SQLite deals with (0-6, Sunday == 0) to a string
     # representation of the date. This is needed because different libraries
     # have different meanings of the first day of the week.
     return { days[int(day)]: int(num) for day, num in rows }
 
-def for_hour_statistics(con):
+def for_hour_statistics(con, category=None):
     """
     Given a connection to the database, will return a list of the number of
     incidents that occurred at a given time. The list is 24 in length with the
     first element corresponding to the zeroth hour of the day (12am to 1am)
     """
     data = [0] * 24
-    for row in for_statistics(con, '%H'):
+    for row in for_statistics(con, '%H', category):
         hour, number = row[:]
         data[int(hour)] = int(number)
     return data
 
-def for_day_statistics(con):
+def for_day_statistics(con, category=None):
     """
     Given a connection to the database, will return a list of the number of
     incidents that have occurred on that day. The list is 366 in length (leap
@@ -61,14 +65,14 @@ def for_day_statistics(con):
     is a December 32nd
     """
     data = [0] * 366
-    for row in for_statistics(con, '%j'):
+    for row in for_statistics(con, '%j', category):
         day, number = row[:]
 
         # SQLite format is 001 - 366
         data[int(day) - 1] = int(number)
     return data
 
-def for_week_statistics(con):
+def for_week_statistics(con, category=None):
     """
     Given a connection to the database, will return a list of the number of
     incidents that have occurred on that week. The list is 54 in length. Yes,
@@ -124,6 +128,15 @@ def for_category(con, category):
                 FROM CRIMES
                 WHERE Crime = ? """
     return parse_rows(con.execute(query, (category,)))
+
+def for_category_statistics(con):
+    """
+    Given a connection to the database, will return a cursor to sorted list
+    of tuples (incident type, number of occurrences)
+    """
+    query = """ SELECT Crime, COUNT(*) FROM Crimes 
+                GROUP BY Crime ORDER BY COUNT(*) DESC """
+    return con.execute(query)
 
 def for_latest(con, take, skip):
     """

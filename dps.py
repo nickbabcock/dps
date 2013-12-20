@@ -17,10 +17,19 @@ def close_connection(exception):
 
 @app.route('/api/v1/statistics')
 def api_statistics():
-    return jsonify(weekday=query.for_weekday_statistics(get_db()),
-                    hour=query.for_hour_statistics(get_db()),
-                    day=query.for_day_statistics(get_db()),
-                    week=query.for_week_statistics(get_db()))
+    top_categories = list(query.for_category_statistics(get_db()))
+
+    # Take only the top few categories as adding additional categories take an
+    # unbearable amount of time
+    top_categories = [category for category, count in top_categories[:10]]
+    top_categories.append(None)
+    return jsonify(result=[{
+        'category': category,
+        'weekday': query.for_weekday_statistics(get_db(), category),
+        'hour': query.for_hour_statistics(get_db(), category),
+        'day': query.for_day_statistics(get_db(), category),
+        'week': query.for_week_statistics(get_db(), category)
+    } for category in top_categories ])
 
 @app.route('/')
 def home():

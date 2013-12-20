@@ -239,19 +239,20 @@
 
     d3.json('/api/v1/statistics', function(error, json) {
         hookUpEvents();
-        days = json.day;
+        var all = _.find(json.result, function(val) { return val.category === null; });
+        days = all.day;
         weekdays = [
-            json.weekday.Sunday,
-            json.weekday.Monday,
-            json.weekday.Tuesday,
-            json.weekday.Wednesday,
-            json.weekday.Thursday,
-            json.weekday.Friday,
-            json.weekday.Saturday
+            all.weekday.Sunday,
+            all.weekday.Monday,
+            all.weekday.Tuesday,
+            all.weekday.Wednesday,
+            all.weekday.Thursday,
+            all.weekday.Friday,
+            all.weekday.Saturday
         ];
 
         dayHeatMap(days);
-        clockHeatMap(json.hour);
+        clockHeatMap(all.hour);
         d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
     });
 })();
