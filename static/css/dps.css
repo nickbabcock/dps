@@ -10,6 +10,7 @@ ul.incidents {
 
 ul.incidents > li {
     padding-right: 2em;
+    padding-left: 1em;
     border: #777777;
     border-width: 1px;
     border-style: solid;
