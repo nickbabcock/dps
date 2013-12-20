@@ -12,15 +12,28 @@ def parse_rows(rows):
             'description': row[5]
             } for row in rows]
 
+def for_statistics(con, time, category=None):
+    """
+    Given a connection to the database, a sqlite date format, and an
+    optional category which to filter incidents by, this will return a list of
+    rows that contain a time and the count of how many incidents ocurred at
+    that time
+    """
+    query = """ SELECT strftime("{time}", Time), COUNT(*) FROM Crimes 
+                GROUP BY strftime("{time}", Time) """ 
+    if category:
+        query += ' WHERE Crime = {category}'
+
+    query = query.format(time=time, category=category)
+    return con.execute(query)
+
 def for_weekday_statistics(con):
     """
     Given a connection to the database, will return a dictionary of weekday
     names and the number of incidents that have occurred on that day.
     """
-    query = """ SELECT strftime('%w', Time), COUNT(*) FROM Crimes
-                GROUP BY strftime('%w', Time) """
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    rows = con.execute(query)
+    rows = for_statistics(con, '%w')
 
     # Convert the format that SQLite deals with (0-6, Sunday == 0) to a string
     # representation of the date. This is needed because different libraries
@@ -33,10 +46,8 @@ def for_hour_statistics(con):
     incidents that occurred at a given time. The list is 24 in length with the
     first element corresponding to the zeroth hour of the day (12am to 1am)
     """
-    query = """ SELECT strftime('%H', Time), COUNT(*) FROM Crimes
-                GROUP BY strftime('%H', Time) """
     data = [0] * 24
-    for row in con.execute(query):
+    for row in for_statistics(con, '%H'):
         hour, number = row[:]
         data[int(hour)] = int(number)
     return data
@@ -49,10 +60,8 @@ def for_day_statistics(con):
     of leap years shifting dates, the algorithm plays dumb and acts as if there
     is a December 32nd
     """
-    query = """ SELECT strftime('%j', Time), COUNT(*) from Crimes
-                GROUP BY strftime('%j', Time)  """
     data = [0] * 366
-    for row in con.execute(query):
+    for row in for_statistics(con, '%j'):
         day, number = row[:]
 
         # SQLite format is 001 - 366
@@ -65,10 +74,8 @@ def for_week_statistics(con):
     incidents that have occurred on that week. The list is 54 in length. Yes,
     54.
     """
-    query = """ SELECT strftime('%W', Time), COUNT(*) FROM Crimes
-                GROUP BY strftime('%W', Time) """
     data = [0] * 54
-    for row in con.execute(query):
+    for row in for_statistics(con, '%W'):
         week, number = row[:]
         data[int(week)] = int(number)
     return data
