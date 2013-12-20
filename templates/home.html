@@ -12,7 +12,7 @@
   <div class='controller'>
     <div class='info'>
       <ul class='incidents' data-bind='foreach: incidents'>
-        <li>
+        <li data-bind='click: $root.centerOnIncident'>
           <div>
             <div data-bind='text: crime'></div>
             <span data-bind='text: time'></span>

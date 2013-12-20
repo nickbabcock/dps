@@ -1,11 +1,11 @@
 (function() {
     'use strict';
 
-    var gmap = function(markers) {
+    var gmap = function(markers, latitude, longitude) {
         var url = GMaps.staticMapURL({
             size: [610, 300],
-            lat: 42.2756663,
-            lng: -83.7356758,
+            lat: latitude || 42.2756663,
+            lng: longitude || -83.7356758,
             markers: markers
         });
 
@@ -16,25 +16,34 @@
         this.crime = data.crime;
         this.time = moment(data.time, 'YYYY-MM-DD HH:mm:ss').format('ddd h:mm A');
         this.description = data.description;
+        this.longitude = data.longitude;
+        this.latitude = data.latitude;
     };
 
     var ViewModel = function() {
+        var self = this;
         this.incidents = ko.observableArray();
         this.page = ko.observable(0);
         this.pageSize = ko.observable(10);
+        this.markers = ko.computed(function() {
+            var markers = [];
+            var results = this.incidents();
+            for (var i = 0; i < results.length; i++) {
+                markers.push({ lat: results[i].latitude, lng: results[i].longitude });
+            }
+
+            return markers;
+        }, this);
         this.latestRequest = ko.computed(function() {
             var obj = { take: this.pageSize(), skip: this.page() * this.pageSize() };
-            var that = this;
             this.incidents([]);
             $.getJSON('/api/v1/latest', obj, function(data) {
                 var results = data.result;     
-                var locations = [];
                 for (var i = 0; i < results.length; i++) {
-                    that.incidents.push(new Person(results[i]));
-                    locations.push({ lat: results[i].latitude, lng: results[i].longitude });
+                    self.incidents.push(new Person(results[i]));
                 }
                 
-                gmap(locations);
+                gmap(self.markers());
             });
         }, this);
 
@@ -44,6 +53,10 @@
 
         this.prevPage = function() {
             this.page(this.page() - 1);
+        };
+
+        this.centerOnIncident = function(incident) {
+            gmap(self.markers(), incident.latitude, incident.longitude);
         };
     };
 

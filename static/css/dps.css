@@ -14,6 +14,12 @@ ul.incidents > li {
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
+    background: linear-gradient(to top, #DDDDDD, white);
+}
+
+ul.incidents > li:hover {
+    background: linear-gradient(to top, #EEEEEE, white);
+    cursor: pointer;
 }
 
 div.controller {
