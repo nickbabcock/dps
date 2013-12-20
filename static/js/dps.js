@@ -14,7 +14,7 @@
 
     var Person = function(data) {
         this.crime = data.crime;
-        this.time = data.time;
+        this.time = moment(data.time, 'YYYY-MM-DD HH:mm:ss').format('ddd h:mm A');
         this.description = data.description;
     };
 
