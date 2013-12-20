@@ -5,9 +5,6 @@
 (function() {
     'use strict';
 
-    var days = [];
-    var weekdays = [];
-
     // Returns the current year as a number
     function firstOfYear() {
         var year = (new Date()).getFullYear();
@@ -81,7 +78,7 @@
             });
     }
 
-    function weekdayHeatMap(days) {
+    function weekdayHeatMap(weekdays) {
         var color = colorScheme(d3.max(weekdays));
 
         // change the domain of the scale slightly so the differences between
@@ -94,13 +91,6 @@
             .text(function(d) {
                 return d3.time.format('%A')(d) + ': ' + weekdays[d.getDay()];
             });
-    }
-
-    function hookUpEvents() {
-        $('button.btn-weeks').on('click', function() { weekHeatMap(days); });
-        $('button.btn-months').on('click', function() { monthHeatMap(days); });
-        $('button.btn-days').on('click', function() { dayHeatMap(days); });
-        $('button.btn-weekday').on('click', function() { weekdayHeatMap(days); });
     }
 
     function createHeatMapSkeleton() {
@@ -237,23 +227,77 @@
     createClock('#clock-morning', 'Morning');
     createClock('#clock-afternoon', 'Afternoon');
 
-    d3.json('/api/v1/statistics', function(error, json) {
-        hookUpEvents();
-        var all = _.find(json.result, function(val) { return val.category === null; });
-        days = all.day;
-        weekdays = [
-            all.weekday.Sunday,
-            all.weekday.Monday,
-            all.weekday.Tuesday,
-            all.weekday.Wednesday,
-            all.weekday.Thursday,
-            all.weekday.Friday,
-            all.weekday.Saturday
-        ];
+    var ViewModel = function() {
+        this.data = ko.observableArray(); 
+        this.selectedCategory = ko.observable();
+        this.selectedHeatMap = ko.observable('Months');
 
-        dayHeatMap(days);
-        clockHeatMap(all.hour);
+        this.categories = ko.computed(function() {
+            var result = _.pluck(this.data(), 'category');
+            result =  _.map(result, function(val) { return val === null ? 'All' : val; });
+            result.sort();
+            return result;
+        }, this);
+
+        this.selectedData = ko.computed(function() {
+            if (!this.selectedCategory()) {
+                return null;
+            }
+
+            var toFind = this.selectedCategory() === 'All' ? null :
+                this.selectedCategory();
+
+            return _.find(this.data(), function(val) {
+                return val.category === toFind;
+            }, this);
+        }, this);
+
+        this.weekdays = ko.computed(function() {
+            var display = this.selectedData();
+            return !display || [
+                display.weekday.Sunday,
+                display.weekday.Monday,
+                display.weekday.Tuesday,
+                display.weekday.Wednesday,
+                display.weekday.Thursday,
+                display.weekday.Friday,
+                display.weekday.Saturday
+            ];
+        }, this);
+
+        this.days = ko.computed(function() {
+            var display = this.selectedData();
+            return !display || display.day;
+        }, this);
+
+        this.hours = ko.computed(function() {
+            var display = this.selectedData();
+            return !display || display.hour;
+        }, this);
+
+        this.refreshData = ko.computed(function() {
+            if (!this.selectedCategory()) {
+                return;
+            }
+
+            switch (this.selectedHeatMap()) {
+                case 'Months': monthHeatMap(this.days()); break;
+                case 'Weeks': weekHeatMap(this.days()); break;
+                case 'Days': dayHeatMap(this.days()); break;
+                case 'Weekday': weekdayHeatMap(this.weekdays()); break;
+            }
+
+            clockHeatMap(this.hours());
+        }, this);
+    };
+
+    var vm = new ViewModel();
+
+    d3.json('/api/v1/statistics', function(error, json) {
+        vm.data(json.result);
         d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
     });
+    
+    ko.applyBindings(vm);
 })();
 

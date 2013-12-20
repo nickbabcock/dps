@@ -8,10 +8,24 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
-  <button class='btn-months' type='button'>Months</button>
-  <button class='btn-weeks' type='button'>Weeks</button>
-  <button class='btn-days' type='button'>Days</button>
-  <button class='btn-weekday' type='button'>Weekday</button>
+  <label>
+    <input type='radio' name='options' id='option-months' value='Months'
+           data-bind='checked: selectedHeatMap'/>Months
+  </label>
+  <label>
+    <input type='radio' name='options' id='option-weeks' value='Weeks'
+           data-bind='checked: selectedHeatMap'/>Weeks
+  </label>
+  <label>
+    <input type='radio' name='options' id='option-days' value='Days'
+           data-bind='checked: selectedHeatMap'/>Days
+  </label>
+  <label>
+    <input type='radio' name='options' id='option-week' value='Weekday'
+           data-bind='checked: selectedHeatMap'/>Weekday
+  </label>
+
+  <select data-bind='options: categories, value: selectedCategory'></select>
   <svg id='heatMap'></svg>
   <svg id='clock-morning'></svg>
   <svg id='clock-afternoon'></svg>
@@ -21,5 +35,6 @@ Note on implementation: The close observer will be quick to point out the fact t
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.min.js'></script>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js'></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js'></script>
   <script type='text/javascript' src="{{ url_for('static', filename='js/statistics.js') }}"> </script>
 {% endblock %}
