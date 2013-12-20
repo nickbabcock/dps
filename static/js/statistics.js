@@ -184,14 +184,34 @@
 
     function clockHeatMap(hours) {
         var color = colorScheme(d3.max(hours));
+
+        // Humanize the time, as people need help telling time
         d3.select('#clock-morning').selectAll('path')
             .style('fill', function(d) { return color(hours[d.data]); })
             .selectAll('title')
-            .text(function(d) { return (d.data + 1) + ' AM: ' + hours[d.data]; });
+            .text(function(d) {
+                if (d.data === 0) {
+                    return 'Midnight - 1 AM: ' + hours[d.data];
+                }
+                else if (d.data === 11) {
+                    return '11 AM - noon: ' + hours[d.data];
+                }
+                return (d.data + 1) + ' AM - ' + (d.data + 2) + ' AM: ' + hours[d.data];
+            });
+
         d3.select('#clock-afternoon').selectAll('path')
             .style('fill', function(d) { return color(hours[d.data + 12]); })
             .selectAll('title')
-            .text(function(d) { return (d.data + 1) + ' PM: ' + hours[d.data + 12];});
+            .text(function(d) {
+                if (d.data === 0) {
+                    return 'Noon - 1 PM: ' + hours[d.data + 12];
+                }
+                else if (d.data === 11) {
+                    return '11 PM - midnight: ' + hours[d.data + 12];
+                }
+                return (d.data + 1) + ' PM - ' + (d.data + 2) + ' PM: ' + 
+                    hours[d.data + 12];
+            });
     }
 
     // Given a date that represents a month, will create a path that will encompass
