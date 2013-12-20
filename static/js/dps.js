@@ -18,21 +18,37 @@
         this.description = data.description;
     };
 
-    var viewModel = {
-        incidents: ko.observableArray()
+    var ViewModel = function() {
+        this.incidents = ko.observableArray();
+        this.page = ko.observable(0);
+        this.pageSize = ko.observable(10);
+        this.latestRequest = ko.computed(function() {
+            var obj = { take: this.pageSize(), skip: this.page() * this.pageSize() };
+            var that = this;
+            this.incidents([]);
+            $.getJSON('/api/v1/latest', obj, function(data) {
+                var results = data.result;     
+                var locations = [];
+                for (var i = 0; i < results.length; i++) {
+                    that.incidents.push(new Person(results[i]));
+                    locations.push({ lat: results[i].latitude, lng: results[i].longitude });
+                }
+                
+                gmap(locations);
+            });
+        }, this);
+
+        this.nextPage = function() {
+            this.page(this.page() + 1);
+        };
+
+        this.prevPage = function() {
+            this.page(this.page() - 1);
+        };
     };
 
-    $.getJSON('/api/v1/latest', function(data) {
-        var results = data.result;     
-        var locations = [];
-        for (var i = 0; i < results.length; i++) {
-            viewModel.incidents.push(new Person(results[i]));
-            locations.push({ lat: results[i].latitude, lng: results[i].longitude });
-        }
-        
-        gmap(locations);
-    });
+    var vm = new ViewModel();
 
     gmap();
-    ko.applyBindings(viewModel);
+    ko.applyBindings(vm);
 })();

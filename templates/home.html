@@ -10,15 +10,22 @@
 
 {% block content %}
   <div class='controller'>
-    <ul class='incidents' data-bind='foreach: incidents'>
-      <li>
-        <div>
-          <div data-bind='text: crime'></div>
-          <span data-bind='text: time'></span>
-          <p class='less-important' data-bind='text: description'></p>
-        </div>
-      </li>
-    </ul>
+    <div class='info'>
+      <ul class='incidents' data-bind='foreach: incidents'>
+        <li>
+          <div>
+            <div data-bind='text: crime'></div>
+            <span data-bind='text: time'></span>
+            <p class='less-important' data-bind='text: description'></p>
+          </div>
+        </li>
+      </ul>
+      <button id='btn-prev' 
+              data-bind='click: prevPage, enable: page'>
+            Prev
+      </button>
+      <button id='btn-next' data-bind='click: nextPage'>Next</button>
+    </div>
     <div class='map'>
       <img id='map'/>
     </div>
