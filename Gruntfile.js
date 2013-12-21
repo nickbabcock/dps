@@ -72,7 +72,24 @@ module.exports = function(grunt) {
                     src: ['*.js']
                 }]
             }
+        },
+        markdown: {
+            all: ['static/markdown/statistics.md']
         }
+    });
+
+    grunt.registerMultiTask('markdown', 'convert markdown', function() {
+        var marked = require('marked');
+        var fs = require('fs');
+        var path = require('path');
+        this.files.forEach(function(f) {
+            f = f.src.toString();
+            var markdown = fs.readFileSync(f, 'utf8'); 
+            var html = marked(markdown); 
+            var dir = path.dirname(f);
+            var newPath = path.join(dir, path.basename(f, path.extname(f)) + '.html');
+            fs.writeFileSync(newPath, html);
+        });
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -81,5 +98,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.registerTask('default', ['jshint', 'shell']);
+    grunt.registerTask('mark', 'markdown');
     grunt.registerTask('build', ['default', 'uglify', 'copy']);
 };
