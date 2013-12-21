@@ -78,7 +78,7 @@ module.exports = function(grunt) {
             }
         },
         markdown: {
-            all: {
+            statistics: {
                 files: [{
                     src: ['static/markdown/statistics.md'],
                     dest: 'templates/statistics-generated.html' 
@@ -87,6 +87,20 @@ module.exports = function(grunt) {
                     postProcess: function(html) {
                         return '{% extends "statistics.html" %}\n' +
                                '{% block post %} ' +
+                                html +
+                               '{% endblock %}';
+                    }
+                }
+            },
+            about: {
+                files: [{
+                    src: ['static/markdown/about.md'],
+                    dest: 'templates/about-generated.html'
+                }],
+                options: {
+                    postProcess: function(html) {
+                        return '{% extends "base.html" %}\n' +
+                               '{% block content %} ' +
                                 html +
                                '{% endblock %}';
                     }

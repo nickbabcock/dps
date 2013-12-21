@@ -39,6 +39,10 @@ def home():
 def statistics():
     return render_template('statistics-generated.html')
 
+@app.route('/about')
+def about():
+    return render_template('about-generated.html')
+
 @app.route('/api/v1/date/<int:year>/<int:month>/<int:day>')
 def day_incidents(year, month, day):
     return jsonify(result=query.for_day_incidents(get_db(), date(year, month, day)))
