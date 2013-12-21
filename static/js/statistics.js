@@ -230,7 +230,7 @@
     var ViewModel = function() {
         this.data = ko.observableArray(); 
         this.selectedCategory = ko.observable();
-        this.selectedHeatMap = ko.observable('Months');
+        this.selectedHeatMap = ko.observable('Days');
 
         // Returns a string of categories that the user can select to view the
         // data on. Since null represents all categories, replace it with 'All'
