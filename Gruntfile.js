@@ -20,6 +20,10 @@ module.exports = function(grunt) {
             python: {
                 files: python,
                 tasks: ['shell:pyflakes', 'shell:pyTests']
+            },
+            markdown: {
+                files: grunt.file.expand(['static/markdown/*.md']),
+                tasks: ['markdown']
             }
         },
         shell: {
