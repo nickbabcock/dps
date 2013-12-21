@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+templates/*generated.html
 .database
 env/
 data/
