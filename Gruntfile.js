@@ -124,7 +124,7 @@ module.exports = function(grunt) {
             var markdown = fs.readFileSync(f.src[0], 'utf8'); 
             var html = marked(markdown); 
             html = options.postProcess(html);
-            fs.writeFileSync(f.dest.toString(), html);
+            fs.writeFileSync(f.dest, html);
         });
     });
 
