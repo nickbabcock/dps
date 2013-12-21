@@ -37,7 +37,7 @@ def home():
 
 @app.route('/statistics')
 def statistics():
-    return render_template('statistics.html')
+    return render_template('statistics-generated.html')
 
 @app.route('/api/v1/date/<int:year>/<int:month>/<int:day>')
 def day_incidents(year, month, day):

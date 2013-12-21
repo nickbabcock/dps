@@ -74,7 +74,20 @@ module.exports = function(grunt) {
             }
         },
         markdown: {
-            all: ['static/markdown/statistics.md']
+            all: {
+                files: [{
+                    src: ['static/markdown/statistics.md'],
+                    dest: 'templates/statistics-generated.html' 
+                }],
+                options: {
+                    postProcess: function(html) {
+                        return '{% extends "statistics.html" %}\n' +
+                               '{% block post %} ' +
+                                html +
+                               '{% endblock %}';
+                    }
+                }
+            }
         }
     });
 
@@ -82,13 +95,15 @@ module.exports = function(grunt) {
         var marked = require('marked');
         var fs = require('fs');
         var path = require('path');
+        var options = this.options({
+            postProcess: function(html) { return html; }
+        });
+
         this.files.forEach(function(f) {
-            f = f.src.toString();
-            var markdown = fs.readFileSync(f, 'utf8'); 
+            var markdown = fs.readFileSync(f.src[0], 'utf8'); 
             var html = marked(markdown); 
-            var dir = path.dirname(f);
-            var newPath = path.join(dir, path.basename(f, path.extname(f)) + '.html');
-            fs.writeFileSync(newPath, html);
+            html = options.postProcess(html);
+            fs.writeFileSync(f.dest.toString(), html);
         });
     });
 
@@ -97,7 +112,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('default', ['jshint', 'shell']);
-    grunt.registerTask('mark', 'markdown');
+    grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
     grunt.registerTask('build', ['default', 'uglify', 'copy']);
 };
