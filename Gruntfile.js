@@ -95,6 +95,8 @@ module.exports = function(grunt) {
         }
     });
 
+    // Allow writing content to be written in markdown and then convert them
+    // into templates.
     grunt.registerMultiTask('markdown', 'convert markdown', function() {
         var marked = require('marked');
         var fs = require('fs');
