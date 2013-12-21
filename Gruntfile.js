@@ -100,6 +100,7 @@ module.exports = function(grunt) {
                 options: {
                     postProcess: function(html) {
                         return '{% extends "base.html" %}\n' +
+                               '{% block title %}About{% endblock %}\n' +
                                '{% block content %} ' +
                                 html +
                                '{% endblock %}';
