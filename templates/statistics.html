@@ -8,27 +8,36 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
-  <label>
+  <div class='graphic-options'>
     <input type='radio' name='options' id='option-months' value='Months'
-           data-bind='checked: selectedHeatMap'/>Months
-  </label>
-  <label>
-    <input type='radio' name='options' id='option-weeks' value='Weeks'
-           data-bind='checked: selectedHeatMap'/>Weeks
-  </label>
-  <label>
-    <input type='radio' name='options' id='option-days' value='Days'
-           data-bind='checked: selectedHeatMap'/>Days
-  </label>
-  <label>
-    <input type='radio' name='options' id='option-week' value='Weekday'
-           data-bind='checked: selectedHeatMap'/>Weekday
-  </label>
+           data-bind='checked: selectedHeatMap'/>
+    <label class='btn' for='option-months'>Months</label>
 
-  <select data-bind='options: categories, value: selectedCategory'></select>
-  <svg id='heatMap'></svg>
-  <svg id='clock-morning'></svg>
-  <svg id='clock-afternoon'></svg>
+    <input type='radio' name='options' id='option-weeks' value='Weeks'
+           data-bind='checked: selectedHeatMap'/>
+    <label class='btn' for='option-weeks'>Weeks</label>
+
+    <input type='radio' name='options' id='option-days' value='Days'
+           data-bind='checked: selectedHeatMap'/>
+    <label class='btn' for='option-days'>Days</label>
+
+    <input type='radio' name='options' id='option-week' value='Weekday'
+           data-bind='checked: selectedHeatMap'/>
+    <label class='btn' for='option-week'>Weekday</label>
+    <span class='dropdown'>
+      <select data-bind='options: categories, value: selectedCategory'>
+      </select>
+    </span>
+  </div>
+
+  <div>
+    <svg id='heatMap'></svg>
+  </div>
+
+  <div>
+    <svg id='clock-morning'></svg>
+    <svg id='clock-afternoon'></svg>
+  </div>
 
   {% block post %}{% endblock %}
 

@@ -10,3 +10,36 @@ svg {
     /* Padding to make sure that paths don't get clipped */
     padding: 1em;
 }
+
+.btn {
+    background-color: #5e9162;
+    color: white;
+    padding: 12px 6px;
+}
+
+.btn:hover, input[type='radio']:checked + label {
+    background-color: #1e6823;
+}
+
+input[type='radio'] {
+    display: none;
+}
+
+div.graphic-options {
+    display: table;
+}
+
+.btn:first-child {
+    padding-left: 12px;
+}
+
+.dropdown {
+    padding: 12px 6px;
+    background-color: #5e9162;
+}
+
+select {
+    width: 250px;
+    margin: 12px 6px;
+    border: none;
+}
