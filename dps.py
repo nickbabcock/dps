@@ -54,7 +54,16 @@ def category(category):
 def latest():
     take = request.args.get('take', 10)
     skip = request.args.get('skip', 0)
-    return jsonify(result=query.for_latest(get_db(), take, skip))
+    lat = request.args.get('lat', None)
+    lng = request.args.get('lng', None)
+
+    if lat and lng:
+        lat = float(lat)
+        lng = float(lng)
+        results = query.for_latest_via_location(get_db(), take, skip, lat, lng)
+        return jsonify(result=results)
+    else:
+        return jsonify(result=query.for_latest(get_db(), take, skip))
 
 if __name__ == '__main__':
     app.run('0.0.0.0')

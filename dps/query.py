@@ -148,3 +148,17 @@ def for_latest(con, take, skip):
                 ORDER BY Time DESC
                 LIMIT ? OFFSET ? """
     return parse_rows(con.execute(query, (take, skip)))
+
+def for_latest_via_location(con, take, skip, latitude, longitude):
+    tolerance = 0.01
+    lat_range = (latitude - tolerance, latitude + tolerance)
+    lng_range = (longitude - tolerance, longitude + tolerance)
+
+    query = """ SELECT rowid, Time, Crime, Latitude, Longitude, Description
+                FROM Crimes
+                WHERE Latitude BETWEEN ? AND ?
+                AND Longitude BETWEEN ? AND ?
+                ORDER BY Time DESC
+                LIMIT ? OFFSET ? """
+    return parse_rows(con.execute(query, lat_range + lng_range + (take, skip)))
+

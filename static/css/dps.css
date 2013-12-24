@@ -38,3 +38,7 @@ div.map {
 p.less-important {
     color: #777777
 }
+
+#txt-search {
+    width: 300px;
+}

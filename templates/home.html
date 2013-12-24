@@ -25,6 +25,11 @@
             Prev
       </button>
       <button id='btn-next' data-bind='click: nextPage'>Next</button>
+      <div class='search'>
+        <label for='txt-search'>Street Address: </label>
+        <input id='txt-search' data-bind='value: address, update: "afterkeydown"'></input>
+        <button data-bind='click: searchAddress'>Search</button>
+      </div>
     </div>
     <div class='map'>
       <img id='map'/>
