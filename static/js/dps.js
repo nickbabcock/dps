@@ -37,6 +37,9 @@
         this.address = ko.observable();
 
         this.searchAddress = function() { 
+            // Searching an address brings us to the first page
+            this.page(0);
+
             var addr = this.address().toLowerCase();
             if (addr.indexOf('ann arbor') === -1) {
                 addr += ', ann arbor, MI';
