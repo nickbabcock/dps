@@ -26,8 +26,8 @@
       </button>
       <button id='btn-next' data-bind='click: nextPage'>Next</button>
       <div class='search'>
-        <label for='txt-search'>Street Address: </label>
-        <input id='txt-search'
+        <!--[if lt IE 10]> <label for='txt-search'>Street Address: </label> <![endif]-->
+        <input id='txt-search' placeholder='Address: eg. 1503 Washington Heights'
                data-bind='value: address, update: "afterkeydown", event: { "keyup": inputChange }'>
         </input>
         <button data-bind='click: searchAddress'>Search</button>
