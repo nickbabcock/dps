@@ -150,7 +150,7 @@ def for_latest(con, take, skip):
     return parse_rows(con.execute(query, (take, skip)))
 
 def for_latest_via_location(con, take, skip, latitude, longitude):
-    tolerance = 0.01
+    tolerance = 0.0025
     lat_range = (latitude - tolerance, latitude + tolerance)
     lng_range = (longitude - tolerance, longitude + tolerance)
 
