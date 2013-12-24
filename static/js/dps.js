@@ -14,10 +14,19 @@
 
     var Person = function(data) {
         this.crime = data.crime;
-        this.time = moment(data.time, 'YYYY-MM-DD HH:mm:ss').format('ddd h:mm A');
         this.description = data.description;
         this.longitude = data.longitude;
         this.latitude = data.latitude;
+
+        // If the incident happened recently, simply put the day of the week
+        // and the time, else put a relative date (10 days ago, etc) 
+        var then = moment(data.time, 'YYYY-MM-DD HH:mm:ss');
+        if (moment().diff(then, 'days') > 7) {
+            this.time = then.fromNow();
+        }
+        else {
+            this.time = then.format('ddd h:mm A');
+        }
     };
 
     var ViewModel = function() {
