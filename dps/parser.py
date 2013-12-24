@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from datetime import datetime, date, timedelta
+import os
 import sqlite3
 import requests
 
@@ -113,6 +114,11 @@ def scrape(frm=date.today(), until=date(2000, 1, 23)):
 
 def connect_db():
     """ Establishes connection with database with scraped data """
-    with open('.database', 'r') as f:
+
+    # The database location is located in a file called .database that is one
+    # directory above this file
+    fs = os.path.realpath(__file__)
+    fs = os.path.join(os.path.dirname(fs), '..', '.database')
+    with open(fs, 'r') as f:
         return sqlite3.connect(f.read().strip())
     
