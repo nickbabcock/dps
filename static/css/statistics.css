@@ -15,6 +15,7 @@ svg {
     background-color: #5e9162;
     color: white;
     padding: 12px 6px;
+    display: table-cell;
 }
 
 .btn:hover, input[type='radio']:checked + label {
@@ -34,8 +35,9 @@ div.graphic-options {
 }
 
 .dropdown {
-    padding: 12px 6px;
+    padding: 0px 6px;
     background-color: #5e9162;
+    display: table-cell;
 }
 
 select {
