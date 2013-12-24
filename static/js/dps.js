@@ -50,8 +50,15 @@
                     for (var i = 0; i < results.length; i++) {
                         self.incidents.push(new Person(results[i]));
                     }
+
+                    var markers = self.markers();
+                    markers.push({
+                        lat: obj.lat,
+                        lng: obj.lng,
+                        color: 'blue'
+                    });
                     
-                    gmap(self.markers(), obj.lat, obj.lng);
+                    gmap(markers, obj.lat, obj.lng);
                 });
             });
         };
