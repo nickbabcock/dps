@@ -39,7 +39,8 @@
         this.searchAddress = function() { 
             // Searching an address brings us to the first page
             this.page(0);
-
+            
+            // Make typing 'ann arbor' an option for the lazy
             var addr = this.address().toLowerCase();
             if (addr.indexOf('ann arbor') === -1) {
                 addr += ', ann arbor, MI';
@@ -73,6 +74,13 @@
                     gmap(markers, obj.lat, obj.lng);
                 });
             });
+        };
+
+        // Let the user press the enter key in the input field to submit query
+        this.inputChange = function(data, event) {
+            if (event.keyCode === 13) {
+                this.searchAddress();
+            }
         };
 
         // Transform the longitude and latitude stored in the incidents into
