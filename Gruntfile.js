@@ -110,6 +110,12 @@ module.exports = function(grunt) {
         cssmin: {
             min: {
                 expand: true,
+                src: ['bin/static/css/*.css']
+            }
+        },
+        autoprefixer: {
+            multiple: {
+                expand: true,
                 src: ['static/css/*.css'],
                 dest: 'bin'
             }
@@ -140,6 +146,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
-    grunt.registerTask('build', ['default', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'copy']);
 };
