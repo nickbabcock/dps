@@ -66,7 +66,6 @@ module.exports = function(grunt) {
                     src: [
                         'dps/**/*.py',
                         'dps.py', 
-                        'static/css/*.css', 
                         'templates/**/*.html'
                     ]
                 }, { 
@@ -107,6 +106,13 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+        cssmin: {
+            min: {
+                expand: true,
+                src: ['static/css/*.css'],
+                dest: 'bin'
+            }
         }
     });
 
@@ -133,6 +139,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
-    grunt.registerTask('build', ['default', 'uglify', 'copy']);
+    grunt.registerTask('build', ['default', 'uglify', 'cssmin', 'copy']);
 };
