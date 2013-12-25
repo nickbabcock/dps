@@ -4,8 +4,8 @@
     var gmap = function(markers, latitude, longitude) {
         var url = GMaps.staticMapURL({
             size: [610, 300],
-            lat: latitude || 42.2756663,
-            lng: longitude || -83.7356758,
+            lat: latitude,
+            lng: longitude,
             markers: markers
         });
 
@@ -31,12 +31,14 @@
 
     var ViewModel = function() {
         var self = this;
+        var defaultLat = 42.2756663;
+        var defaultLng = -83.7356758;
         this.incidents = ko.observableArray();
         this.page = ko.observable(0);
         this.pageSize = ko.observable(10);
         this.address = ko.observable();
         this.googleAddr = ko.observable();
-        this.search = {};
+        this.search = ko.observable({});
 
         this.searchAddress = function() { 
             // Searching an address brings us to the first page
@@ -53,34 +55,17 @@
                 var location = data.results[0].geometry.location;
                 self.googleAddr(data.results[0].formatted_address);
 
-                self.search = {
+                self.search({
                     lat: location.lat,
                     lng: location.lng,
                     color: 'blue'
-                };
-
-                var obj = { 
-                    take: self.pageSize(),
-                    skip: self.page() * self.pageSize(),
-                    lat: location.lat,
-                    lng: location.lng
-                };
-
-                $.getJSON('/api/v1/latest', obj, function(data) {
-                    self.incidents([]);        
-                    var results = data.result;     
-                    for (var i = 0; i < results.length; i++) {
-                        self.incidents.push(new Person(results[i]));
-                    }
-
-                    gmap(self.markers(), obj.lat, obj.lng);
                 });
             });
         };
 
         this.clearAddress = function() {
             this.googleAddr('');
-            this.search = {};
+            this.search({});
         };
 
         // Let the user press the enter key in the input field to submit query
@@ -101,25 +86,30 @@
 
             // If the user has searched for something display a marker where
             // they searched
-            if (this.search) {
-                markers.push(this.search);
+            if (this.search()) {
+                markers.push(this.search());
             }
 
             return markers;
         }, this);
 
-        // Whenever there is a page change, request additional information from
-        // the server and show a new map
-        this.latestRequest = ko.computed(function() {
-            var obj = { take: this.pageSize(), skip: this.page() * this.pageSize() };
-            this.incidents([]);
+        this.sendRequest = ko.computed(function() {
+            var obj = {
+                take: this.pageSize(),
+                skip: this.page() * this.pageSize(),
+                lat: this.search().lat,
+                lng: this.search().lng
+            };
+            
             $.getJSON('/api/v1/latest', obj, function(data) {
+                self.incidents([]);
                 var results = data.result;     
                 for (var i = 0; i < results.length; i++) {
                     self.incidents.push(new Person(results[i]));
                 }
                 
-                gmap(self.markers());
+                gmap(self.markers(), self.search().lat || defaultLat,
+                    self.search().lng || defaultLng);
             });
         }, this);
 
