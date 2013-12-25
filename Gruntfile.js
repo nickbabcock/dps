@@ -66,6 +66,8 @@ module.exports = function(grunt) {
                     src: [
                         'dps/**/*.py',
                         'dps.py', 
+                        'generate-statistics.py',
+                        'scrape.py',
                         'templates/**/*.html'
                     ]
                 }, { 
