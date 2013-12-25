@@ -11,6 +11,12 @@
 {% block content %}
   <div class='controller'>
     <div class='info'>
+      <h2>Recent Incidents</h2>
+      <span data-bind='text: googleAddr'></span>
+      <button style='display: none'
+              data-bind='visible: googleAddr, click: clearAddress'>
+              Clear Address
+      </button>
       <ul class='incidents' data-bind='foreach: incidents'>
         <li data-bind='click: $root.centerOnIncident'>
           <div>

@@ -35,6 +35,7 @@
         this.page = ko.observable(0);
         this.pageSize = ko.observable(10);
         this.address = ko.observable();
+        this.googleAddr = ko.observable();
 
         this.searchAddress = function() { 
             // Searching an address brings us to the first page
@@ -49,6 +50,7 @@
             var url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
             $.getJSON(url, {address: addr}, function(data) {
                 var location = data.results[0].geometry.location;
+                self.googleAddr(data.results[0].formatted_address);
 
                 var obj = { 
                     take: self.pageSize(),
@@ -74,6 +76,10 @@
                     gmap(markers, obj.lat, obj.lng);
                 });
             });
+        };
+
+        this.clearAddress = function() {
+            this.googleAddr('');
         };
 
         // Let the user press the enter key in the input field to submit query
