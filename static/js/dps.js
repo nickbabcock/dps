@@ -36,6 +36,7 @@
         this.pageSize = ko.observable(10);
         this.address = ko.observable();
         this.googleAddr = ko.observable();
+        this.search = {};
 
         this.searchAddress = function() { 
             // Searching an address brings us to the first page
@@ -52,6 +53,12 @@
                 var location = data.results[0].geometry.location;
                 self.googleAddr(data.results[0].formatted_address);
 
+                self.search = {
+                    lat: location.lat,
+                    lng: location.lng,
+                    color: 'blue'
+                };
+
                 var obj = { 
                     take: self.pageSize(),
                     skip: self.page() * self.pageSize(),
@@ -66,20 +73,14 @@
                         self.incidents.push(new Person(results[i]));
                     }
 
-                    var markers = self.markers();
-                    markers.push({
-                        lat: obj.lat,
-                        lng: obj.lng,
-                        color: 'blue'
-                    });
-                    
-                    gmap(markers, obj.lat, obj.lng);
+                    gmap(self.markers(), obj.lat, obj.lng);
                 });
             });
         };
 
         this.clearAddress = function() {
             this.googleAddr('');
+            this.search = {};
         };
 
         // Let the user press the enter key in the input field to submit query
@@ -96,6 +97,12 @@
             var results = this.incidents();
             for (var i = 0; i < results.length; i++) {
                 markers.push({ lat: results[i].latitude, lng: results[i].longitude });
+            }
+
+            // If the user has searched for something display a marker where
+            // they searched
+            if (this.search) {
+                markers.push(this.search);
             }
 
             return markers;
