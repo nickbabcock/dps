@@ -68,6 +68,7 @@ module.exports = function(grunt) {
                         'dps.py', 
                         'generate-statistics.py',
                         'scrape.py',
+                        'requirements.txt',
                         'templates/**/*.html'
                     ]
                 }, { 
