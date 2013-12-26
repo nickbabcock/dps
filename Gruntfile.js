@@ -107,6 +107,20 @@ module.exports = function(grunt) {
                                '{% endblock %}';
                     }
                 }
+            },
+            home: {
+                files: {
+                    'templates/home-generated.html': ['static/markdown/home.md']
+                },
+                options: {
+                    postProcess: function(html) {
+                        return '{% extends "home.html" %}\n' +
+                               '{% block post %} ' +
+                                html +
+                               '{% endblock %}';
+                    }
+
+                }
             }
         },
         cssmin: {

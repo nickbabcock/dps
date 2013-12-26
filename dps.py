@@ -21,7 +21,7 @@ def api_statistics():
     
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home-generated.html')
 
 @app.route('/statistics')
 def statistics():
