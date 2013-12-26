@@ -56,7 +56,18 @@ module.exports = function(grunt) {
                 files: {
                     'bin/static/js/statistics.js': ['static/js/statistics.js']
                 }
-            }
+            },
+           dps: {
+                options: {
+                    sourceMap: 'bin/static/js/dps.min.map',
+                    sourceMappingURL: 'dps.min.map',
+                    sourceMapRoot: 'orig',
+                    sourceMapPrefix: 2
+                },
+                files: {
+                    'bin/static/js/dps.js': ['static/js/dps.js']
+                }
+           }
         },
         copy: {
             main: {
