@@ -9,16 +9,18 @@
   {% endblock %}
 </head>
 <body>
-  <div>
-    <h1>University of Michigan's DPS Data</h1>
-    <div class='pure-memu pure-menu-open pure-menu-horizontal'>
-      <ul>
-        <li><a class='pure-button' href='/'>Home</a></li>
-        <li><a class='pure-button' href='statistics'>Statistics</a></li>
-        <li><a class='pure-button' href='about'>About</a></li>
-      </ul>
+  <div class='content pure-g-r'>
+    <div class='pure-u-1'>
+      <h1>University of Michigan's DPS Data</h1>
+      <div class='pure-memu pure-menu-open pure-menu-horizontal'>
+        <ul>
+          <li><a class='pure-button' href='/'>Home</a></li>
+          <li><a class='pure-button' href='statistics'>Statistics</a></li>
+          <li><a class='pure-button' href='about'>About</a></li>
+        </ul>
+      </div>
     </div>
+    <div class='pure-u-1'>{% block content %}{% endblock %}</div>
   </div>
-  <div class='content pure-g-r'>{% block content %}{% endblock %}</div>
 </body>
 </html>
