@@ -150,6 +150,12 @@ def for_latest(con, take, skip):
     return parse_rows(con.execute(query, (take, skip)))
 
 def for_latest_via_location(con, take, skip, latitude, longitude):
+    """
+    Given a connection to the database, query will return at most the
+    specified number of incidents within a radius of certain GPS coordinates,
+    skipping the latest specified number of as well
+    """
+    rows
     tolerance = 0.0025
     lat_range = (latitude - tolerance, latitude + tolerance)
     lng_range = (longitude - tolerance, longitude + tolerance)
