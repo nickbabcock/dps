@@ -8,7 +8,7 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
-  <form class='pure-form'>
+  <form class='pure-form pure-u-1'>
     <div class='pure-memu pure-menu-open pure-menu-horizontal pure-u-1'>
       <ul>
         <li>
@@ -39,11 +39,9 @@
             Weekday
           </button>
         </li>
-        <li>
-          <span class='dropdown'>
-            <select data-bind='options: categories, value: selectedCategory'>
-            </select>
-          </span>
+        <li class='pure-u-2-5'>
+          <select data-bind='options: categories, value: selectedCategory'>
+          </select>
         </li>
       </ul>
     </div>
