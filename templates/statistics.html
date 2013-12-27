@@ -8,36 +8,46 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
-  <div class='pure-memu pure-menu-open pure-menu-horizontal pure-u-1'>
-    <ul>
-      <li>
-        <input type='radio' name='options' id='option-months' value='Months'
-               data-bind='checked: selectedHeatMap'/>
-        <label class='btn' for='option-months'>Months</label>
-      </li>
-      <li>
-        <input type='radio' name='options' id='option-weeks' value='Weeks'
-               data-bind='checked: selectedHeatMap'/>
-        <label class='btn' for='option-weeks'>Weeks</label>
-      </li>
-      <li>
-        <input type='radio' name='options' id='option-days' value='Days'
-               data-bind='checked: selectedHeatMap'/>
-        <label class='btn' for='option-days'>Days</label>
-      </li>
-      <li>
-        <input type='radio' name='options' id='option-week' value='Weekday'
-               data-bind='checked: selectedHeatMap'/>
-        <label class='btn' for='option-week'>Weekday</label>
-      </li>
-      <li>
-        <span class='dropdown'>
-          <select data-bind='options: categories, value: selectedCategory'>
-          </select>
-        </span>
-      </li>
-    </ul>
-  </div>
+  <form class='pure-form'>
+    <div class='pure-memu pure-menu-open pure-menu-horizontal pure-u-1'>
+      <ul>
+        <li>
+          <button class='pure-button'
+            data-bind='css: { "pure-button-active": selectedHeatMap() === "Months" },
+                       click: function() { this.selectedHeatMap("Months"); }'>
+            Months
+          </button>
+        </li>
+        <li>
+          <button class='pure-button'
+            data-bind='css: { "pure-button-active": selectedHeatMap() === "Weeks" },
+                       click: function() { this.selectedHeatMap("Weeks"); }'>
+            Weeks
+          </button>
+        </li>
+        <li>
+          <button class='pure-button'
+            data-bind='css: { "pure-button-active": selectedHeatMap() === "Days" },
+                       click: function() { this.selectedHeatMap("Days"); }'>
+            Days
+          </button>
+        </li>
+        <li>
+          <button class='pure-button'
+            data-bind='css: { "pure-button-active": selectedHeatMap() === "Weekday" },
+                       click: function() { this.selectedHeatMap("Weekday"); }'>
+            Weekday
+          </button>
+        </li>
+        <li>
+          <span class='dropdown'>
+            <select data-bind='options: categories, value: selectedCategory'>
+            </select>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </form>
 
   <div class='pure-u-1'>
     <svg id='heatMap'></svg>

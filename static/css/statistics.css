@@ -11,36 +11,3 @@ svg {
     padding: 1em;
 }
 
-.btn {
-    background-color: #5e9162;
-    color: white;
-    padding: 12px 6px;
-}
-
-.btn:hover, input[type='radio']:checked + label {
-    background-color: #1e6823;
-}
-
-input[type='radio'] {
-    display: none;
-}
-
-div.pure-menu {
-    display: table;
-}
-
-.btn:first-child {
-    padding-left: 12px;
-}
-
-.dropdown {
-    padding: 0px 6px;
-    background-color: #5e9162;
-    display: table-cell;
-}
-
-select {
-    width: 250px;
-    margin: 12px 6px;
-    border: none;
-}
