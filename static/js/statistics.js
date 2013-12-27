@@ -95,12 +95,21 @@
 
     function createHeatMapSkeleton() {
         var yearWidth = 960;
-        var yearHeight = 136;
+        var yearHeight = 153;
         var daySize = 17;
         var svg = d3.select('#heatMap')
             .data(d3.range(366))
             .attr('width', yearWidth)
             .attr('height', yearHeight);
+
+        svg.append('text')
+            .attr('x', 400)
+            .attr('y', 16)
+            .attr('class', 'chart-title')
+            .text('Number of Incidents Collapsed into Single Calendar Year');
+        
+        // Put main graphic below the chart title
+        svg = svg.append('g').attr('transform', 'translate(0 30)');
 
         // Create a rectangle for each day of the week with each rectangle's
         // location determined by the day of the week and the week of the year
