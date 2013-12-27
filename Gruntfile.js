@@ -149,6 +149,17 @@ module.exports = function(grunt) {
                 src: ['static/css/*.css'],
                 dest: 'bin'
             }
+        },
+        compress: {
+            gzip: {
+                options: {
+                    mode: 'tgz',
+                    archive: 'app.tar.gz'
+                },
+                files: [
+                    {expand: true, src: ['bin/*'], dest: 'bin'}
+                ]
+            }
         }
     });
 
@@ -177,6 +188,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-autoprefixer');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
-    grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'copy']);
+    grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'copy', 'compress']);
 };
