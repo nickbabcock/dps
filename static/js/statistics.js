@@ -103,7 +103,7 @@
             .attr('height', yearHeight);
 
         // Create a rectangle for each day of the week with each rectangle's
-        // location determeined by the day of the week and the week of the year
+        // location determined by the day of the week and the week of the year
         // that the day falls in
         var rects = svg.selectAll('rect')
             .data(function(d) { return d3.time.days(firstOfYear(), lastOfYear()); })
