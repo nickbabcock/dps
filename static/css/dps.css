@@ -1,9 +1,6 @@
 ul.incidents {
-    float: left;
     list-style-type: none;
     padding-left: 0;
-    width: 300px;
-    height: 300px;
     overflow-y: auto;
     margin-right: 2em;
 }
@@ -23,22 +20,7 @@ ul.incidents > li:hover {
     cursor: pointer;
 }
 
-div.controller {
-    width: 1000px;
-    margin: 0 auto;
-}
-
-div.map {
-    float: right;
-    padding: 1em;
-    box-shadow: 0 0 16px #777777;
-    border-radius: 2px;
-}
-
 p.less-important {
     color: #777777
 }
 
-#txt-search {
-    width: 300px;
-}

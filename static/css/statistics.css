@@ -15,7 +15,6 @@ svg {
     background-color: #5e9162;
     color: white;
     padding: 12px 6px;
-    display: table-cell;
 }
 
 .btn:hover, input[type='radio']:checked + label {
@@ -26,7 +25,7 @@ input[type='radio'] {
     display: none;
 }
 
-div.graphic-options {
+div.pure-menu {
     display: table;
 }
 
