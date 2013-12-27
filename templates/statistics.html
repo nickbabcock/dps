@@ -8,7 +8,7 @@
 {% block title %}Incident Statistics{% endblock %}
 
 {% block content %}
-  <div class='pure-memu pure-menu-open pure-menu-horizontal'>
+  <div class='pure-memu pure-menu-open pure-menu-horizontal pure-u-1'>
     <ul>
       <li>
         <input type='radio' name='options' id='option-months' value='Months'
@@ -39,16 +39,16 @@
     </ul>
   </div>
 
-  <div>
+  <div class='pure-u-1'>
     <svg id='heatMap'></svg>
   </div>
 
-  <div>
-    <svg id='clock-morning'></svg>
-    <svg id='clock-afternoon'></svg>
-  </div>
+  <div class='pure-u-1-2'><svg id='clock-morning'></svg></div>
+  <div class='pure-u-1-2'><svg id='clock-afternoon'></svg></div>
 
-  {% block post %}{% endblock %}
+  <div class='pure-u-1'>
+    {% block post %}{% endblock %}
+  </div>
 
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.min.js'></script>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js'></script>

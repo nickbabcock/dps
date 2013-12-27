@@ -115,8 +115,10 @@ module.exports = function(grunt) {
                         return '{% extends "base.html" %}\n' +
                                '{% block title %}About{% endblock %}\n' +
                                '{% block content %} ' +
+                               '<div class="pure-u-1">\n' +
                                 html +
-                               '{% endblock %}';
+                               '</div>\n' +
+                               '{% endblock %}\n';
                     }
                 }
             },

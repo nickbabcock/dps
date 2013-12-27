@@ -9,7 +9,7 @@
 
 
 {% block content %}
-  <div class='pure-g-r'>
+  <div 'pure-u'>
     <div class='pure-u-1-3'>
       <h2>Recent Incidents</h2>
       <span data-bind='text: googleAddr'></span>
@@ -51,7 +51,9 @@
       <img id='map'/>
     </div>
   </div>
-  {% block post %}{% endblock %}
+  <div class='pure-u-1'>
+    {% block post %}{% endblock %}
+  </div>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js'></script>
   <script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>
   <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.5/gmaps.min.js'></script>
