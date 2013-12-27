@@ -161,6 +161,16 @@ module.exports = function(grunt) {
                     {expand: true, src: ['bin/**'], dest: 'bin'}
                 ]
             }
+        },
+        scp: {
+            options: {
+                host: 'umichdps',
+                username: 'nick',
+                password: true
+            },
+            target: {
+                files: [{src: 'app.tar.gz', dest: '/home/nick', cwd: '.'}]
+            }
         }
     });
 
@@ -190,6 +200,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-scp');
     grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
     grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'copy', 'compress']);
 };
