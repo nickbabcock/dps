@@ -158,7 +158,7 @@ module.exports = function(grunt) {
                     archive: 'app.tar.gz'
                 },
                 files: [
-                    {expand: true, src: ['bin/**'], dest: 'bin'}
+                    {expand: true, src: ['bin/**'], dest: '.'}
                 ]
             }
         },
