@@ -53,7 +53,7 @@
             var url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
             $.getJSON(url, {address: addr}, function(data) {
                 var location = data.results[0].geometry.location;
-                self.googleAddr(data.results[0].formatted_address);
+                self.googleAddr('Near: ' + data.results[0].formatted_address);
 
                 self.search({
                     lat: location.lat,
