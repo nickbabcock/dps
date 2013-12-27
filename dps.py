@@ -3,7 +3,6 @@ from datetime import date
 from dps import parser, query
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
 
 def get_db():
     if not hasattr(g, 'db'):
@@ -66,4 +65,5 @@ def latest():
         return jsonify(result=query.for_latest(get_db(), take, skip))
 
 if __name__ == '__main__':
+    app.config['DEBUG'] = True
     app.run('0.0.0.0')
