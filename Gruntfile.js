@@ -76,6 +76,7 @@ module.exports = function(grunt) {
                     dest: 'bin',
                     src: [
                         'dps/**/*.py',
+                        'static/favicon.ico',
                         'dps.py', 
                         'generate-statistics.py',
                         'scrape.py',
