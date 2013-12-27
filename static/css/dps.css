@@ -27,5 +27,7 @@ p.less-important {
 
 #map {
     margin-top: 6px;
+    width: 610;
+    height: 300;
 }
 
