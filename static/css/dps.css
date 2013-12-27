@@ -26,8 +26,11 @@ p.less-important {
 }
 
 #map {
-    margin-top: 6px;
+    margin-top: 18px;
     width: 610;
     height: 300;
+    padding: 15px;
+    box-shadow: 0 0 20px #DDDDDD;
+    border-radius: 2px;
 }
 
