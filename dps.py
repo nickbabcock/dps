@@ -1,6 +1,8 @@
-from flask import Flask, g, jsonify, render_template, request, send_file
+from flask import Flask, g, jsonify, render_template, request, send_file, \
+    send_from_directory
 from datetime import date
 from dps import parser, query
+import os
 
 app = Flask(__name__)
 
@@ -13,6 +15,11 @@ def get_db():
 def close_connection(exception):
     if hasattr(g, 'db'):
         g.db.close()
+
+@app.route('/favicon.ico')
+def get_favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+        'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/api/v1/statistics')
 def api_statistics():
