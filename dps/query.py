@@ -155,7 +155,6 @@ def for_latest_via_location(con, take, skip, latitude, longitude):
     specified number of incidents within a radius of certain GPS coordinates,
     skipping the latest specified number of as well
     """
-    rows
     tolerance = 0.0025
     lat_range = (latitude - tolerance, latitude + tolerance)
     lng_range = (longitude - tolerance, longitude + tolerance)
