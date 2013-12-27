@@ -31,7 +31,8 @@
             data-bind='visible: googleAddr, click: clearAddress'>
             Clear Address
     </button>
-    <ul class='incidents' data-bind='foreach: incidents'>
+    <ul class='incidents' style='display: none'
+        data-bind='foreach: incidents, visible: incidents'>
       <li data-bind='click: $root.centerOnIncident'>
         <div>
           <div data-bind='text: crime'></div>
