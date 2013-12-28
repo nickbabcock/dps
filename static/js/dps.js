@@ -39,6 +39,7 @@
         this.address = ko.observable();
         this.googleAddr = ko.observable();
         this.search = ko.observable({});
+        this.isLoading = ko.observable(false);
 
         this.searchAddress = function() { 
             // Searching an address brings us to the first page
@@ -50,6 +51,7 @@
                 addr += ', ann arbor, MI';
             }
 
+            this.isLoading(true);
             var url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
             $.getJSON(url, {address: addr}, function(data) {
                 var location = data.results[0].geometry.location;
@@ -110,6 +112,7 @@
                 
                 gmap(self.markers(), self.search().lat || defaultLat,
                     self.search().lng || defaultLng);
+                self.isLoading(false);
             });
         }, this);
 
