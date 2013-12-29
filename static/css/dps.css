@@ -3,7 +3,6 @@ ul.incidents {
     padding-left: 0;
     overflow-y: auto;
     max-height: 300px;
-    margin-right: 2em;
 }
 
 ul.incidents > li {
