@@ -11,10 +11,9 @@ svg {
     padding: 1em;
 }
 
-text.chart-title {
-    text-anchor: middle;
-    font-size: 32;
-}
+text.chart-title, text.chart-sub-title { text-anchor: middle; }
+text.chart-title { font-size: 32 }
+text.chart-subtitle { font-size: 20 }
 
 select {
     width: 100%;

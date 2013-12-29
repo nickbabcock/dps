@@ -107,9 +107,14 @@
             .attr('y', 16)
             .attr('class', 'chart-title')
             .text('Incidents Collapsed into Single Year');
+
+        svg.append('text')
+            .attr('x', 400)
+            .attr('y', 40)
+            .attr('class', 'chart-sub-title');
         
         // Put main graphic below the chart title
-        svg = svg.append('g').attr('transform', 'translate(0 30)');
+        svg = svg.append('g').attr('transform', 'translate(0 50)');
 
         // Create a rectangle for each day of the week with each rectangle's
         // location determined by the day of the week and the week of the year
@@ -304,6 +309,12 @@
                 case 'Days': dayHeatMap(this.days()); break;
                 case 'Weekday': weekdayHeatMap(this.weekdays()); break;
             }
+
+            var self = this;
+            d3.select('#heatMap').select('.chart-sub-title').text(function() {
+                return self.selectedCategory() + ' Incidents Aggregated by ' +
+                    self.selectedHeatMap();
+            });
 
             clockHeatMap(this.hours());
         }, this);
