@@ -201,7 +201,7 @@
                 else if (d.data === 11) {
                     return '11 AM - noon: ' + hours[d.data];
                 }
-                return (d.data + 1) + ' AM - ' + (d.data + 2) + ' AM: ' + hours[d.data];
+                return (d.data) + ' AM - ' + (d.data + 1) + ' AM: ' + hours[d.data];
             });
 
         d3.select('#clock-afternoon').selectAll('path')
@@ -214,7 +214,7 @@
                 else if (d.data === 11) {
                     return '11 PM - midnight: ' + hours[d.data + 12];
                 }
-                return (d.data + 1) + ' PM - ' + (d.data + 2) + ' PM: ' + 
+                return (d.data) + ' PM - ' + (d.data + 1) + ' PM: ' + 
                     hours[d.data + 12];
             });
     }
