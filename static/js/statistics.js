@@ -95,12 +95,21 @@
 
     function createHeatMapSkeleton() {
         var yearWidth = 960;
-        var yearHeight = 136;
+        var yearHeight = 153;
         var daySize = 17;
         var svg = d3.select('#heatMap')
             .data(d3.range(366))
             .attr('width', yearWidth)
             .attr('height', yearHeight);
+
+        svg.append('text')
+            .attr('x', 400)
+            .attr('y', 16)
+            .attr('class', 'chart-title')
+            .text('Incidents Collapsed into Single Year');
+        
+        // Put main graphic below the chart title
+        svg = svg.append('g').attr('transform', 'translate(0 30)');
 
         // Create a rectangle for each day of the week with each rectangle's
         // location determined by the day of the week and the week of the year
@@ -141,7 +150,7 @@
 
     function createClock(id, text) {
         var width = 300;
-        var height = 300;
+        var height = 352;
         var radius = Math.min(width, height) / 2;
 
         var arc = d3.svg.arc().outerRadius(radius - 10);
@@ -152,7 +161,8 @@
         // Add chart title
         svg.append('text')
             .attr('x', (width / 2))
-            .attr('text-anchor', 'middle')
+            .attr('class', 'chart-title')
+            .attr('y', 16)
             .text(text);
 
         // Make everything in group relative to the center of the graphic
@@ -224,8 +234,8 @@
     }
 
     createHeatMapSkeleton();
-    createClock('#clock-morning', 'Morning');
-    createClock('#clock-afternoon', 'Afternoon');
+    createClock('#clock-morning', 'Morning Incidents');
+    createClock('#clock-afternoon', 'Afternoon Incidents');
 
     var ViewModel = function() {
         this.data = ko.observableArray(); 

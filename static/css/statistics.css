@@ -11,6 +11,11 @@ svg {
     padding: 1em;
 }
 
+text.chart-title {
+    text-anchor: middle;
+    font-size: 32;
+}
+
 select {
     width: 100%;
     min-width: 250px;
