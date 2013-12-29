@@ -95,7 +95,7 @@
 
     function createHeatMapSkeleton() {
         var yearWidth = 960;
-        var yearHeight = 153;
+        var yearHeight = 170;
         var daySize = 17;
         var svg = d3.select('#heatMap')
             .data(d3.range(366))
