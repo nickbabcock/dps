@@ -26,6 +26,19 @@ p.less-important {
     color: #777777
 }
 
+div.paginator {
+    display: block;
+    letter-spacing: -4.9px;
+}
+
+div.paginator > button {
+    height: 2.3em;
+}
+
+div.paginator > button:not(:first-child):not(:last-child) {
+    vertical-align: -1;
+}
+
 #map {
     margin-top: 18px;
     width: 610;
