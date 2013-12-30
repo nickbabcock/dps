@@ -33,9 +33,9 @@ Remarkably, there are incidents where the frequency does not fluxuate with the
 number of students.  These include: property damage (accidental), assist other
 agency, and to some extent, traffic accident (off roadway). The only immediate
 explanation is that other agencies (Ann Arbor police department, fire
-department, etc) aren't influenced by the flux of students and so DPS has a
-constant flow of activity from other agencies. Intuitive explanations for the
-other two types of incidents remain elusive.
+department, etc) aren't influenced by the flux of students and so the
+university's police has a constant flow of activity from other agencies.
+Intuitive explanations for the other two types of incidents remain elusive.
 
 # Notes on Implementation
 
