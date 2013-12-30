@@ -11,9 +11,9 @@ incidents reported at the Big House are said to have address 1201 Main, not
 1201 S Main. This is a small but critical difference because due to the
 ambiguity, Google's Geocoding API returns the latitude and longitude for 1201
 N Main. So now, unfortunately, there is a poor home next to M-14 that has
-many incidents of fradulent IDs. Another mistake in the data are spelling
-mistakes, which will throw off calculations in unpredictable ways (mispelling
-addresses results in wrong latitude and longitude, mispelling incident types
+many incidents of fraudulent IDs. Another mistake in the data are spelling
+mistakes, which will throw off calculations in unpredictable ways (misspelling
+addresses results in wrong latitude and longitude, misspelling incident types
 means a new kind of incident). This is why all official queries into police
 reports should be directed towards the offices of police department at the
 University.
@@ -22,7 +22,7 @@ University.
 
 All code has been open sourced to [Github][], so feel free to raise issues or
 suggest features that are wanted. Or, even better, address the issues yourself
-and they'll be incoporated into the site.
+and they'll be incorporated into the site.
 
 While all the code for obtaining the data is open sourced and is trivial to
 replicate, the data itself is not open sourced for several reasons. There is
