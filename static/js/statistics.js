@@ -204,7 +204,7 @@
                 .attr('y1', 130 * Math.sin((2 * Math.PI) * (i / 36)))
                 .attr('x2', 140 * Math.cos((2 * Math.PI) * (i / 36)))
                 .attr('y2', 140 * Math.sin((2 * Math.PI) * (i / 36)))
-                .attr('stroke', 'black')
+                .attr('stroke', '#333')
                 .attr('stroke-width', 2);
         }
     }
