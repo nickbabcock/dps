@@ -185,6 +185,17 @@
 
         // Create the tooltips
         g.selectAll('path').append('title');
+
+        // Create tick marks
+        for (var i = 0; i < 36; i++) {
+            svg.append('line')
+                .attr('x1', 130 * Math.cos((2 * Math.PI) * (i / 36)))
+                .attr('y1', 130 * Math.sin((2 * Math.PI) * (i / 36)))
+                .attr('x2', 140 * Math.cos((2 * Math.PI) * (i / 36)))
+                .attr('y2', 140 * Math.sin((2 * Math.PI) * (i / 36)))
+                .attr('stroke', 'black')
+                .attr('stroke-width', 2);
+        }
     }
 
     function clockHeatMap(hours) {
