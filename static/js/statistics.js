@@ -154,6 +154,7 @@
     }
 
     function createClock(id, text) {
+        var i;
         var width = 300;
         var height = 352;
         var radius = Math.min(width, height) / 2;
@@ -186,8 +187,18 @@
         // Create the tooltips
         g.selectAll('path').append('title');
 
+        // Create numbers on clock
+        for (i = 0; i < 12; i++) {
+            svg.append('text')
+                .attr('x', 110 * Math.cos((2 * Math.PI) * (i / 12) - (Math.PI/2)))
+                .attr('y', 110 * Math.sin((2 * Math.PI) * (i / 12) - (Math.PI/2)))
+                .attr('text-anchor', 'middle')
+                .attr('font-size', 18)
+                .text(i === 0 ? 12 : i);
+        }
+
         // Create tick marks
-        for (var i = 0; i < 36; i++) {
+        for (i = 0; i < 36; i++) {
             svg.append('line')
                 .attr('x1', 130 * Math.cos((2 * Math.PI) * (i / 36)))
                 .attr('y1', 130 * Math.sin((2 * Math.PI) * (i / 36)))
