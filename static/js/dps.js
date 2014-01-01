@@ -29,14 +29,14 @@
         }
     };
 
-    var ViewModel = function() {
+    var ViewModel = function(addr) {
         var self = this;
         var defaultLat = 42.2756663;
         var defaultLng = -83.7356758;
         this.incidents = ko.observableArray();
         this.page = ko.observable(0);
         this.pageSize = ko.observable(10);
-        this.address = ko.observable();
+        this.address = addr ? ko.observable(addr) : ko.observable();
         this.googleAddr = ko.observable();
         this.search = ko.observable({});
         this.isLoading = ko.observable(false);
@@ -130,9 +130,36 @@
         this.centerOnIncident = function(incident) {
             gmap(self.markers(), incident.latitude, incident.longitude);
         };
+
+        this.history = ko.computed(function() {
+            if (this.address()) {
+                History.pushState({
+                    address: this.address()
+                 }, null, '?address=' + this.address());
+            }
+        }, this).extend({ throttle: 1 });
     };
 
-    var vm = new ViewModel();
+    History.Adapter.bind(window,'statechange',function() {
+        if (History.getState().data && vm) {
+            vm.address(History.getState().data.address);
+            if (History.getState().data.address) {
+                vm.searchAddress();
+            }
+            else {
+                vm.clearAddress();
+            }
+        }
+    });
+
+    var vm;
+    if (location.search) {
+        vm = new ViewModel(location.search.split('=')[1].replace(/%20/g, ' '));
+        vm.searchAddress();
+    }
+    else {
+        vm = new ViewModel();
+    }
 
     gmap();
     ko.applyBindings(vm);
