@@ -29,8 +29,9 @@ def api_statistics():
 def home():
     return render_template('home-generated.html')
 
-@app.route('/statistics')
-def statistics():
+@app.route('/statistics/<path:path>')
+@app.route('/statistics', defaults={'path': ''})
+def statistics(path):
     return render_template('statistics-generated.html')
 
 @app.route('/about')

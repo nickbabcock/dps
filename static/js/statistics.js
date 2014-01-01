@@ -260,6 +260,23 @@
             .range(['#eeeeee', '#1e6823']);
     }
 
+    function extractHeatMap(url) {
+        if (url.split('/').length != 4) {
+            return 'Days';
+        }
+
+        return url.split('/')[3];
+    }
+
+    function extractCategory(url) {
+        if (url.split('/').length != 4) {
+            return undefined;
+        }
+
+        var category = url.split('/')[2];
+        return category === 'All' ? undefined : category;
+    }
+
     createHeatMapSkeleton();
     createClock('#clock-morning', 'Morning Incidents');
     createClock('#clock-afternoon', 'Afternoon Incidents');
@@ -267,24 +284,13 @@
     var ViewModel = function() {
         this.data = ko.observableArray(); 
         this.selectedCategory = ko.observable();
-        this.selectedHeatMap = ko.observable('Days');
-
-        // Returns a string of categories that the user can select to view the
-        // data on. Since null represents all categories, replace it with 'All'
-        this.categories = ko.computed(function() {
-            var result = _.pluck(this.data(), 'category');
-            result =  _.map(result, function(val) { return val === null ? 'All' : val; });
-            result.sort();
-            return result;
-        }, this);
+        this.selectedHeatMap = ko.observable();
+        this.categories = ko.observableArray();
+        this.enactHistory = ko.observable(false);
 
         // Returns the statistics that are associated with the selected
         // category
         this.selectedData = ko.computed(function() {
-            if (!this.selectedCategory()) {
-                return null;
-            }
-
             var toFind = this.selectedCategory() === 'All' ? null :
                 this.selectedCategory();
 
@@ -321,7 +327,7 @@
 
         // When the selected category has changed, update all the heat maps
         this.refreshData = ko.computed(function() {
-            if (!this.selectedCategory()) {
+            if (!this.data() || !this.selectedData()) {
                 return;
             }
 
@@ -340,13 +346,40 @@
 
             clockHeatMap(this.hours());
         }, this);
+
+        this.history = ko.computed(function() {
+            if (!this.enactHistory()) {
+                return; 
+            }
+
+            var url = this.selectedCategory() + '/' + this.selectedHeatMap();
+            History.pushState({
+                category: this.selectedCategory(),
+                heatMap: this.selectedHeatMap()
+            }, null, '/statistics/' + url);
+        }, this);
     };
 
     var vm = new ViewModel();
 
     d3.json('/api/v1/statistics', function(error, json) {
         vm.data(json.result);
+        vm.categories(_.map(_.pluck(vm.data(), 'category'), function(val) {
+            return val || "All";
+        }).sort());
+
+        var val = extractCategory(History.getState().hash) || 'All';
+        var index = vm.categories().indexOf(val);
+        vm.selectedCategory(vm.categories()[index]);
+        vm.selectedHeatMap(extractHeatMap(History.getState().hash));
+        vm.enactHistory(true);
+
         d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
+    });
+
+    History.Adapter.bind(window,'statechange',function() {
+        vm.selectedCategory(History.getState().data.category);
+        vm.selectedHeatMap(History.getState().data.heatMap);
     });
     
     ko.applyBindings(vm);
