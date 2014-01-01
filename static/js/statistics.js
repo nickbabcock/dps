@@ -275,7 +275,6 @@
         }
 
         var category = url.split('/')[4];
-        category = category.charAt(0).toUpperCase() + category.slice(1);
         return category === 'All' ? undefined : category;
     }
 
@@ -355,10 +354,12 @@
             }
 
             var url = this.selectedCategory() + '/' + this.selectedHeatMap();
+            url = url.toLowerCase().replace(/[ ,\(\)]+/g, '-');
+            url = url.replace(/-\//, '\/');
             History.pushState({
                 category: this.selectedCategory(),
                 heatMap: this.selectedHeatMap()
-            }, null, '/statistics/' + url.toLowerCase());
+            }, null, '/statistics/' + url);
         }, this);
     };
 
@@ -371,7 +372,10 @@
         }).sort());
 
         var val = extractCategory(History.getState().cleanUrl) || 'All';
-        var index = vm.categories().indexOf(val);
+        var index = _.map(vm.categories(), function(val) {
+            return val.replace(/[ ,\(\)]+/g, '-').replace(/-$/, '').toLowerCase();
+        }).indexOf(val);
+
         vm.selectedCategory(vm.categories()[index]);
         vm.selectedHeatMap(extractHeatMap(History.getState().cleanUrl));
         vm.enactHistory(true);
