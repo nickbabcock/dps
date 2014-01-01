@@ -261,19 +261,21 @@
     }
 
     function extractHeatMap(url) {
-        if (url.split('/').length != 4) {
+        if (url.split('/').length != 6) {
             return 'Days';
         }
 
-        return url.split('/')[3];
+        var result = url.split('/')[5];
+        return result.charAt(0).toUpperCase() + result.slice(1);
     }
 
     function extractCategory(url) {
-        if (url.split('/').length != 4) {
+        if (url.split('/').length != 6) {
             return undefined;
         }
 
-        var category = url.split('/')[2];
+        var category = url.split('/')[4];
+        category = category.charAt(0).toUpperCase() + category.slice(1);
         return category === 'All' ? undefined : category;
     }
 
@@ -356,7 +358,7 @@
             History.pushState({
                 category: this.selectedCategory(),
                 heatMap: this.selectedHeatMap()
-            }, null, '/statistics/' + url);
+            }, null, '/statistics/' + url.toLowerCase());
         }, this);
     };
 
@@ -368,10 +370,10 @@
             return val || "All";
         }).sort());
 
-        var val = extractCategory(History.getState().hash) || 'All';
+        var val = extractCategory(History.getState().cleanUrl) || 'All';
         var index = vm.categories().indexOf(val);
         vm.selectedCategory(vm.categories()[index]);
-        vm.selectedHeatMap(extractHeatMap(History.getState().hash));
+        vm.selectedHeatMap(extractHeatMap(History.getState().cleanUrl));
         vm.enactHistory(true);
 
         d3.select('#heatMap').selectAll('rect').classed('day-absent', false);
