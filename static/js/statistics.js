@@ -359,7 +359,7 @@
             History.pushState({
                 category: this.selectedCategory(),
                 heatMap: this.selectedHeatMap()
-            }, null, '/statistics/' + url);
+            }, document.title, '/statistics/' + url);
         }, this);
     };
 

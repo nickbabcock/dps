@@ -135,7 +135,7 @@
             if (this.address()) {
                 History.pushState({
                     address: this.address()
-                 }, null, '?address=' + this.address());
+                 }, document.title, '?address=' + this.address());
             }
         }, this).extend({ throttle: 1 });
     };
