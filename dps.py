@@ -27,7 +27,20 @@ def get_favicon():
 
 @app.route('/api/v1/statistics')
 def api_statistics():
-    return send_file('.cached-statistics.json') 
+    # A poor man's compression. If the client accepts gzip content, then send
+    # them the compressed file, else send them the uncompressed. Normally I
+    # am not a fan of roll your own compression but considering storing the
+    # file is rolling your own caching, then this just continues the trend. Not
+    # to mention sending statistics is, by far, the largest contributor of
+    # bandwidth at 16KB uncompressed. At 1/3 the size, compression is smart.
+    # A reason why we should be the one's gzipping is that we *know* what the
+    # gzipped content is. A webserver would likely calculate the gzipped
+    # contents, which isn't free.
+    if 'gzip' not in request.headers.get('Accept-Encoding', '').lower():
+        return send_file('.cached-statistics.json') 
+    response = send_file('.cached-statistics.json.gz', 'application/json')
+    response.headers['Content-Encoding'] = 'gzip'
+    return response
     
 @app.route('/')
 def home():
