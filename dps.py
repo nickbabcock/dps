@@ -5,6 +5,8 @@ from dps import parser, query
 import os
 
 app = Flask(__name__)
+serve = render_template if __name__ == '__main__' else \
+    lambda x : send_file(os.path.join('templates', x))
 
 def get_db():
     if not hasattr(g, 'db'):
@@ -27,16 +29,16 @@ def api_statistics():
     
 @app.route('/')
 def home():
-    return render_template('home-generated.html')
+    return serve('home-generated.html')
 
 @app.route('/statistics/<path:path>')
 @app.route('/statistics', defaults={'path': ''})
 def statistics(path):
-    return render_template('statistics-generated.html')
+    return serve('statistics-generated.html')
 
 @app.route('/about')
 def about():
-    return render_template('about-generated.html')
+    return serve('about-generated.html')
 
 @app.route('/api/v1/date/<int:year>/<int:month>/<int:day>')
 def day_incidents(year, month, day):

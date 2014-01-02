@@ -7,6 +7,8 @@ module.exports = function(grunt) {
         pythonTests[i] = pythonTests[i].substr(0, pythonTests[i].length - 3);
     }
 
+    var templates = grunt.file.expand({ cwd: 'templates' }, ['*-generated.html']);
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
@@ -42,6 +44,12 @@ module.exports = function(grunt) {
                     execOptions: {
                         cwd: 'tests'
                     }
+                }
+            },
+            freeze: {
+                command: 'python freeze.py ' + templates.join(' '),
+                options: {
+                    stdout: true
                 }
             }
         },
@@ -80,8 +88,7 @@ module.exports = function(grunt) {
                         'dps.py', 
                         'generate-statistics.py',
                         'scrape.py',
-                        'requirements.txt',
-                        'templates/**/*.html'
+                        'requirements.txt'
                     ]
                 }, { 
                     expand: true,
@@ -201,6 +208,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-scp');
-    grunt.registerTask('default', ['jshint', 'shell', 'markdown']);
-    grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'copy', 'compress']);
+    grunt.registerTask('default', ['jshint', 'shell:pyflakes', 'shell:pyTests', 'markdown']);
+    grunt.registerTask('build', ['default', 'uglify', 'autoprefixer',  'cssmin', 'shell:freeze', 'copy', 'compress']);
 };
