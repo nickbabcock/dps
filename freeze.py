@@ -2,6 +2,11 @@ import sys
 import os
 from jinja2 import Environment, FileSystemLoader
 
+# The purpose of this program is to render the html templates into plain html
+# files to deploy on the production site. These have a few benefits. Serving an
+# html file to the client allows the client to cache the file. On the first
+# response, serving a file is faster than rendering multiple templates.
+
 def freeze(inFile, outFile):
     env = Environment(loader=FileSystemLoader('templates'))
 

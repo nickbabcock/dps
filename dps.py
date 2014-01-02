@@ -5,6 +5,8 @@ from dps import parser, query
 import os
 
 app = Flask(__name__)
+
+# Render templates if we are debugging also serve static content
 serve = render_template if __name__ == '__main__' else \
     lambda x : send_file(os.path.join('templates', x))
 
