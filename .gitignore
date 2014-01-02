@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 templates/*generated.html
+.cached-statistics.json
 .database
 env/
 data/
