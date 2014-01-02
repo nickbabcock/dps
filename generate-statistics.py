@@ -29,7 +29,7 @@ if __name__ == '__main__':
         'hour': query.for_hour_statistics(con, category),
         'day': query.for_day_statistics(con, category),
         'week': query.for_week_statistics(con, category)
-    } for category in top_categories ]})
+    } for category in top_categories ]}, separators=(',', ':'))
 
     fs = os.path.realpath(__file__)
     fs = os.path.join(os.path.dirname(fs), '.cached-statistics.json')
