@@ -23,16 +23,11 @@ if __name__ == '__main__':
 
     top_categories = [category for category, count in top_categories[:10]]
     top_categories.append(None)
-    string = json.dumps({'result': [{
+    print json.dumps({'result': [{
         'category': category,
         'weekday': query.for_weekday_statistics(con, category),
         'hour': query.for_hour_statistics(con, category),
         'day': query.for_day_statistics(con, category),
         'week': query.for_week_statistics(con, category)
     } for category in top_categories ]}, separators=(',', ':'))
-
-    fs = os.path.realpath(__file__)
-    fs = os.path.join(os.path.dirname(fs), '.cached-statistics.json')
-    with open(fs, 'w') as f:
-        f.write(string)
 
