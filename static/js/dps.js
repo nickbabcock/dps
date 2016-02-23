@@ -52,7 +52,7 @@
             }
 
             this.isLoading(true);
-            var url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
+            var url = '//maps.googleapis.com/maps/api/geocode/json?sensor=false';
             $.getJSON(url, {address: addr}, function(data) {
                 var location = data.results[0].geometry.location;
                 self.googleAddr('Near: ' + data.results[0].formatted_address);
