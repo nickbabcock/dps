@@ -8,21 +8,20 @@
   },
   "author": "Nick Babcock",
   "license": "MIT",
-  "gitHead": "22ca4c852ab3b1d31e900c6367e2069eabca5b1b",
   "bugs": {
     "url": "https://github.com/nickbabcock/dps/issues"
   },
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-shell": "~0.6.1",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-copy": "~0.4.1",
-    "marked": "~0.2.10",
-    "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-autoprefixer": "~0.5.0",
-    "grunt-contrib-compress": "~0.5.3",
-    "grunt-scp": "git://github.com/nickbabcock/grunt-scp.git#inquire"
+    "grunt": "~1.0.0",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-shell": "~2.1.0",
+    "grunt-contrib-uglify": "~3.3.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "marked": "~0.3.9",
+    "grunt-contrib-cssmin": "~2.2.1",
+    "grunt-autoprefixer": "~3.0.4",
+    "grunt-contrib-compress": "~1.4.3",
+    "grunt-scp": "~0.1.10"
   }
 }
