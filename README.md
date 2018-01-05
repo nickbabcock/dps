@@ -1,5 +1,7 @@
 # Umich DPS
 
+<This repo is not maintained anymore and may be archived in the future>
+
 Let me first apologize for the lengthy requirement list, but it combines, in
 my opinion, the best of python and javascript development.
 
