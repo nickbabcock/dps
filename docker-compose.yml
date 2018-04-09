@@ -1,0 +1,25 @@
+
+version: '3'
+
+services:
+  app:  
+    build:
+      dockerfile: Dockerfile.backend
+      context: .
+    restart: 'unless-stopped'
+    volumes:
+      - '/data/dps/database.db:/database.db'
+    expose:
+      - 8000
+  frontend:
+    build:
+      dockerfile: Dockerfile.frontend
+      context: .
+    restart: 'unless-stopped'
+    ports:
+      - 80
+    links:
+      - app
+    volumes:
+      - '/data/dps:/usr/share/nginx/html/data'
+

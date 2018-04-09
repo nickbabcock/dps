@@ -9,7 +9,7 @@ COPY . /site
 WORKDIR /site
 RUN npm install \
 	&& pip install -r requirements.txt \
-	&& npx grunt \
+	&& npx grunt build \
 	&& mv bin/templates/about-generated.html bin/about.html \
 	&& mv bin/templates/home-generated.html bin/index.html \
 	&& mv bin/templates/statistics-generated.html bin/statistics.html

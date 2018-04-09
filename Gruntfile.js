@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    var python = grunt.file.expand(['dps.py', 'preload-database.py', 'dps/**/*.py', 'tests/**/*.py']);
+    var python = grunt.file.expand(['app.py', 'preload-database.py', 'dps/**/*.py', 'tests/**/*.py']);
     var pythonTests = grunt.file.expand({cwd: 'tests'}, ['**/*.py']);
 
     // strip off the .py extension
@@ -85,7 +85,7 @@ module.exports = function(grunt) {
                     src: [
                         'dps/**/*.py',
                         'static/favicon.ico',
-                        'dps.py', 
+                        'app.py', 
                         'generate-statistics.py',
                         'scrape.py',
                         'requirements.txt'

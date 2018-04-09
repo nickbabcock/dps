@@ -1,0 +1,12 @@
+FROM python:2.7
+
+COPY . /site
+WORKDIR /site
+
+RUN pip install -r requirements.txt \
+    && pip install gunicorn \
+    && echo "/database.db" > .database
+
+ENTRYPOINT cd /site && gunicorn -b 0.0.0.0 app:app
+
+VOLUME "/database.db"

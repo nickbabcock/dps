@@ -35,4 +35,4 @@ piece of intellectual property until another entity replicates it.
 
 [police.umich.edu]: http://police.umich.edu/?s=crime_log
 [Github]: https://github.com/nickbabcock/dps
-[nbsoftsolutions]: http://www.nbsoftsolutions.com
+[nbsoftsolutions]: https://nbsoftsolutions.com
