@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:20.15-buster
 
 RUN apt-get update && apt-get install -y \
     python2.7 \

@@ -7,8 +7,6 @@ module.exports = function(grunt) {
         pythonTests[i] = pythonTests[i].substr(0, pythonTests[i].length - 3);
     }
 
-    var templates = grunt.file.expand({ cwd: 'templates' }, ['*-generated.html']);
-
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
@@ -47,7 +45,7 @@ module.exports = function(grunt) {
                 }
             },
             freeze: {
-                command: 'python freeze.py ' + templates.join(' '),
+                command: 'python freeze.py about-generated.html statistics-generated.html home-generated.html',
                 options: {
                     stdout: true
                 }
