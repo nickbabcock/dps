@@ -4,9 +4,9 @@ COPY . /site
 WORKDIR /site
 
 RUN pip install -r requirements.txt \
-    && pip install gunicorn \
+    && pip install gunicorn==19.10.0 \
     && echo "/database.db" > .database
 
-ENTRYPOINT cd /site && gunicorn -b 0.0.0.0 app:app
+ENTRYPOINT ["gunicorn", "-b", "0.0.0.0", "app:app"]
 
 VOLUME "/database.db"
